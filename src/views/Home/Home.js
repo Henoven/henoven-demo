@@ -1,42 +1,42 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import styles from "./home.module.css"
 import { Form, Input, Button, Checkbox, Image, message } from 'antd';
+import { sha256 } from "js-sha256";
 import axios from '../../axios';
 
 const Home = () => {
 
-    const [Email, setEmail] = useState("");
-    const [Password, setPassword] = useState("");
     const onFinish = (values) => {
-        setEmail(values.email);
-        setPassword(values.password);
-      };
-    const onFinishFailed = (errorInfo) => {
-    console.log('Failed:', errorInfo);
-    };
-    useEffect(() => {
         const params = new URLSearchParams();
         params.append("func", "User-li");
-        params.append("args", JSON.stringify({ Email: Email, Password: Password}));
+        params.append("args", JSON.stringify(
+            {
+                 Email: values.email, 
+                 Password: sha256(values.password)
+            }));
         axios.post("", params)
         .then((response) => {
             let validar = JSON.stringify(response);
             if(validar.includes("Error|")){
-                message.error(response.data);
+                const messageToShow =  response.data.split('|');
+                message.error(messageToShow[1]);
             }
             else{
                 message.success("Inicio de sesión");
             }
         })
         .catch(console.log("Error"))
-    }, [Email, Password])
+      };
+    const onFinishFailed = (errorInfo) => {
+    console.log('Failed:', errorInfo);
+    };
     
     return (
         <div className={styles.Home}>
             <div className ={styles.BgImage}/>
             <div className={styles.HomeCard}>
                 <div className ={styles.HomeCardContent}>
-                    <Image src = "http://henovenalfa.000webhostapp.com/resources/logo_henoven.png"/>
+                    <Image src = "http://henovenalfa.000webhostapp.com/resources/logo_henoven.png" preview = {false}/>
                     <Form
                         name="basic"
                         initialValues={{
