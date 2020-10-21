@@ -1,10 +1,12 @@
 import React from 'react';
 import styles from "./home.module.css"
-import { Form, Input, Button, Checkbox, Image, message } from 'antd';
+import { Form, Input, Button, Image, message } from 'antd';
 import { sha256 } from "js-sha256";
 import axios from '../../axios';
+import { useHistory } from 'react-router-dom';
 
-const Home = () => {
+const Login = () => {
+    const history = useHistory();
 
     const onFinish = (values) => {
         const params = new URLSearchParams();
@@ -17,8 +19,9 @@ const Home = () => {
         axios.post("", params)
         .then((response) => {
             let validar = JSON.stringify(response);
-            if(validar.includes("Error|")){
-                const messageToShow =  response.data.split('|');
+            console.log(response.data);
+            if(validar.includes("User|Error")){
+                const messageToShow =  response.data.split(':');
                 message.error(messageToShow[1]);
             }
             else{
@@ -30,7 +33,10 @@ const Home = () => {
     const onFinishFailed = (errorInfo) => {
     console.log('Failed:', errorInfo);
     };
-    
+
+    const handleOnClickRegister = () =>{
+        history.push("/register");
+    };
     return (
         <div className={styles.Home}>
             <div className ={styles.BgImage}/>
@@ -71,12 +77,14 @@ const Home = () => {
                         <Input.Password />
                         </Form.Item>
                         <Form.Item  name="remember" valuePropName="checked">
-                        <Checkbox>Remember me</Checkbox>
+                            <Button type="default" htmlType="button" onClick={()=> handleOnClickRegister()}>
+                                Registrarse
+                            </Button>
                         </Form.Item>
                         <Form.Item>
-                        <Button type="primary" htmlType="submit">
-                            Iniciar sesión
-                        </Button>
+                            <Button type="primary" htmlType="submit">
+                                Iniciar sesión
+                            </Button>
                         </Form.Item>
                     </Form>
                 </div>
@@ -85,4 +93,4 @@ const Home = () => {
     );
 }
 
-export default Home;
+export default Login;
