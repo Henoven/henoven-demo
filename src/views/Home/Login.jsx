@@ -26,6 +26,7 @@ const Login = () => {
             }
             else{
                 message.success("Inicio de sesión");
+                history.push("/mainPage");
             }
         })
         .catch(console.log("Error"))
@@ -61,9 +62,8 @@ const Login = () => {
                             },
                         ]}
                         >
-                        <Input />
+                            <Input />
                         </Form.Item>
-
                         <Form.Item
                         label="Contraseña"
                         name="password"
@@ -74,7 +74,7 @@ const Login = () => {
                             },
                         ]}
                         >
-                        <Input.Password />
+                            <Input.Password />
                         </Form.Item>
                         <Form.Item  name="remember" valuePropName="checked">
                             <Button type="default" htmlType="button" onClick={()=> handleOnClickRegister()}>

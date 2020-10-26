@@ -33,6 +33,7 @@ const Register = () => {
             }
             else{
                 message.success("Registro exitoso");
+                history.push("/mainPage");
             }
         })
         .catch(console.log("Error 123"))
