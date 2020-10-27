@@ -2,10 +2,10 @@ import React from 'react';
 import styles from "./home.module.css"
 import { Form, Input, Button, Image, message } from 'antd';
 import { sha256 } from "js-sha256";
-import axios from '../../axios';
+import axios from "../../axios";
 import { useHistory } from 'react-router-dom';
 
-const Login = () => {
+const Login = ({onChange}) => {
     const history = useHistory();
 
     const onFinish = (values) => {
@@ -35,9 +35,6 @@ const Login = () => {
     console.log('Failed:', errorInfo);
     };
 
-    const handleOnClickRegister = () =>{
-        history.push("/register");
-    };
     return (
         <div className={styles.Home}>
             <div className ={styles.BgImage}/>
@@ -77,7 +74,7 @@ const Login = () => {
                             <Input.Password />
                         </Form.Item>
                         <Form.Item  name="remember" valuePropName="checked">
-                            <Button type="default" htmlType="button" onClick={()=> handleOnClickRegister()}>
+                            <Button type="default" htmlType="button" onClick={()=> onChange("register")}>
                                 Registrarse
                             </Button>
                         </Form.Item>

@@ -5,7 +5,7 @@ import { sha256 } from "js-sha256";
 import axios from '../../axios';
 import { useHistory } from 'react-router-dom';
 
-const Register = () => {
+const Register = ({onChange}) => {
     const history = useHistory();
 
     const onFinish = (values) => {
@@ -40,9 +40,6 @@ const Register = () => {
       };
     const onFinishFailed = (errorInfo) => {
     console.log('Failed:', errorInfo);
-    };
-    const handleOnClickLogin = () =>{
-        history.push("/");
     };
     const ArePasswordEquals = (password1, password2) =>{
         return password1.localeCompare(password2) === 0;
@@ -122,7 +119,7 @@ const Register = () => {
                             <Input.Password/>
                         </Form.Item>
                         <Form.Item>
-                            <Button type="default" htmlType="button" onClick={()=> handleOnClickLogin()}>
+                            <Button type="default" htmlType="button" onClick={()=> onChange("login")}>
                                 Iniciar sesión
                             </Button>
                         </Form.Item>

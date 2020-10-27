@@ -2,14 +2,23 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import * as serviceWorker from './serviceWorker';
 import "./index.css"
-import App from './App';
+
+import { HashRouter as Router } from 'react-router-dom';
+import AppRoutes from './routes';
+import { Provider } from 'react-redux';
+import store from './redux/store';
+
+import 'antd/dist/antd.css';
 
 import 'antd/dist/antd.css';
 
 ReactDOM.render(
-  <React.StrictMode>
-    <App />
-  </React.StrictMode>,
+  <Provider store = {store}>
+        {/* <Router basename="/geest_back/tests/beta/app"> */}
+        <Router>
+            <AppRoutes/>
+        </Router>
+    </Provider>,
   document.getElementById('root')
 );
 
