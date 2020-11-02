@@ -33,7 +33,7 @@ const Register = ({onChange}) => {
             }
             else{
                 message.success("Registro exitoso");
-                history.push("/mainPage");
+                history.push("/teams");
             }
         })
         .catch(console.log("Error 123"))

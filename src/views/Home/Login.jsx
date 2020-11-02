@@ -5,7 +5,7 @@ import { sha256 } from "js-sha256";
 import axios from "../../axios";
 import { useHistory } from 'react-router-dom';
 
-const Login = ({onChange}) => {
+const Login = ({onChange, doLogIn}) => {
     const history = useHistory();
 
     const onFinish = (values) => {
@@ -18,15 +18,15 @@ const Login = ({onChange}) => {
             }));
         axios.post("", params)
         .then((response) => {
-            let validar = JSON.stringify(response);
-            console.log(response.data);
-            if(validar.includes("User|Error")){
-                const messageToShow =  response.data.split(':');
+            const messageFromDB = response.data.Echo !== null ? response.data.Echo : "";
+            if(messageFromDB){
+                const messageToShow =  response.data.Echo.split(":");
                 message.error(messageToShow[1]);
             }
             else{
                 message.success("Inicio de sesión");
-                history.push("/mainPage");
+                doLogIn(response.data);
+                history.push("/teams");
             }
         })
         .catch(console.log("Error"))

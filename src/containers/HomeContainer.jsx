@@ -7,11 +7,11 @@ import Home from '../views/Home/Home';
 
 class HomeContainer extends Component {
 
-    componentDidMount() {
-        if(this.props.sesion){
-            this.props.history.push("/mainPage");
-        }
-    }
+    // componentDidMount() {
+    //     if(this.props.sesion){
+    //         this.props.history.push("/mainPage");
+    //     }
+    // }
     render() {
         return (
             <div>

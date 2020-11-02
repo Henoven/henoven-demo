@@ -1,28 +1,14 @@
-import React from 'react';
-import { HashRouter as Router, Route, Redirect, Switch } from 'react-router-dom';
-import Layout from './components/Layout';
-import routes from './routes';
+import React, {Component} from 'react';
+import MainPage from './components/MainPage/MainPage';
 
-const renderRoutes = () => routes.map(({ path, component }, key) => (
-  <Route
-    path={path}
-    component={component}
-    key={key}
-    exact
-  />
-))
-
-function App() {
-  return (
-    <Router>
-      <Layout>
-        <Switch>
-            {renderRoutes()}
-            <Redirect from="/" to="/" />
-        </Switch>
-      </Layout>
-    </Router>
-  );
+class App extends Component {
+  render() {
+    return (
+      <MainPage>
+        {this.props.children}
+      </MainPage>
+    );
+  }
 }
 
 export default App;
