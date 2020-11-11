@@ -5,7 +5,7 @@ import { sha256 } from "js-sha256";
 import axios from '../../axios';
 import { useHistory } from 'react-router-dom';
 
-const Register = ({onChange}) => {
+const Register = ({onChange, doLogIn}) => {
     const history = useHistory();
 
     const onFinish = (values) => {
@@ -26,13 +26,13 @@ const Register = ({onChange}) => {
             }));
         axios.post("", params)
         .then((response) => {
-            let validar = JSON.stringify(response);
-            if(validar.includes("User|Error")){
-                const messageToShow =  response.data.split(':');
-                message.error(messageToShow[1]);
+            const messageFromDB = response.data.Echo !== null ? response.data.Echo : "";
+            if(messageFromDB){
+                message.error(response.data.Echo);
             }
             else{
                 message.success("Registro exitoso");
+                doLogIn({User: response.data});
                 history.push("/teams");
             }
         })
@@ -49,7 +49,7 @@ const Register = ({onChange}) => {
             <div className ={styles.BgImage}/>
             <div className={styles.HomeCard}>
                 <div className ={styles.HomeCardContent}>
-                    <Image src = "http://henovenalfa.000webhostapp.com/resources/logo_henoven.png" preview = {false}/>
+                    <Image src = "http://henovenalfa.000webhostapp.com/resources/logo_henoven.png" style={{marginBottom: "15px"}} preview = {false}/>
                     <Form
                         name="basic"
                         initialValues={{
@@ -59,31 +59,28 @@ const Register = ({onChange}) => {
                         onFinishFailed={onFinishFailed}
                     >
                         <Form.Item
-                        label="Nombre/s"
                         name="firstName"
                         rules={[
                             {
                             required: true,
-                            message: 'Por favor ingresa tu nombre',
+                            message: 'Falta tu nombre',
                             },
                         ]}
                         >
-                            <Input />
+                            <Input placeholder="Nombre/s"/>
                         </Form.Item>
                         <Form.Item
-                        label="Apellido/s"
                         name="lastName"
                         rules={[
                             {
                             required: true,
-                            message: 'Por favor ingresa tu apellido',
+                            message: 'Falta tu apellido',
                             },
                         ]}
                         >
-                            <Input />
+                            <Input placeholder="Apellido/s"/>
                         </Form.Item>
                         <Form.Item
-                        label="Email"
                         name="email"
                         rules={[
                             {
@@ -92,31 +89,29 @@ const Register = ({onChange}) => {
                             },
                         ]}
                         >
-                            <Input />
+                            <Input placeholder="Email"/>
                         </Form.Item>
                         <Form.Item
-                        label="Contraseña"
                         name="password1"
                         rules={[
                             {
                             required: true,
-                            message: 'Por favor ingresa tu contraseña',
+                            message: 'Falta tu contraseña',
                             },
                         ]}
                         >
-                            <Input.Password />
+                            <Input.Password placeholder="Contraseña"/>
                         </Form.Item>
                         <Form.Item
-                        label="Confirmar contraseña"
                         name="password2"
                         rules={[
                             {
                             required: true,
-                            message: 'Por favor confirma tu contraseña',
+                            message: 'Falta confirmar tu contraseña',
                             },
                         ]}
                         >
-                            <Input.Password/>
+                            <Input.Password placeholder="Confirmar contraseña"/>
                         </Form.Item>
                         <Form.Item>
                             <Button type="default" htmlType="button" onClick={()=> onChange("login")}>

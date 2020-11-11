@@ -3,7 +3,7 @@ import { Route, Switch } from 'react-router-dom';
 import App from "./App"
 
 // Containers
-import Teams from './views/Teams/Teams';
+import TeamsContainer from "./containers/TeamsContainer";
 import HomeContainer from './containers/HomeContainer';
 import Settings from './views/Settings/Settings';
 import Devices from "./views/Devices/Devices";
@@ -19,7 +19,7 @@ const AppRoutes = () => {
             {/* <Route exact path="/carta/:id" component={LetterContainer} /> */}
             <App>
                 <Switch>
-                    <Route exact path="/teams" component={Teams} />
+                    <Route exact path="/teams" component={TeamsContainer} />
                     <Route exact path="/travels" component={Travels} />
                     <Route exact path="/devices" component={Devices} />
                     <Route exact path="/settings" component={Settings} />

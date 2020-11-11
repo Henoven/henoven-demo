@@ -25,7 +25,8 @@ const Login = ({onChange, doLogIn}) => {
             }
             else{
                 message.success("Inicio de sesión");
-                doLogIn(response.data);
+                console.log(response.data);
+                doLogIn({User: response.data});
                 history.push("/teams");
             }
         })
@@ -40,7 +41,7 @@ const Login = ({onChange, doLogIn}) => {
             <div className ={styles.BgImage}/>
             <div className={styles.HomeCard}>
                 <div className ={styles.HomeCardContent}>
-                    <Image src = "http://henovenalfa.000webhostapp.com/resources/logo_henoven.png" preview = {false}/>
+                    <Image src = "http://henovenalfa.000webhostapp.com/resources/logo_henoven.png" preview = {false} style={{marginBottom: "15px"}}/>
                     <Form
                         name="basic"
                         initialValues={{
@@ -50,28 +51,26 @@ const Login = ({onChange, doLogIn}) => {
                         onFinishFailed={onFinishFailed}
                     >
                         <Form.Item
-                        label="Email"
                         name="email"
                         rules={[
                             {
                             required: true,
-                            message: 'Por favor ingresa tu email',
+                            message: 'Falta correo electrónico',
                             },
                         ]}
                         >
-                            <Input />
+                            <Input placeholder="Email"/>
                         </Form.Item>
                         <Form.Item
-                        label="Contraseña"
                         name="password"
                         rules={[
                             {
                             required: true,
-                            message: 'Por favor ingresa tu contraseña',
+                            message: 'Falta contraseña',
                             },
                         ]}
                         >
-                            <Input.Password />
+                            <Input.Password placeholder="Contraseña"/>
                         </Form.Item>
                         <Form.Item  name="remember" valuePropName="checked">
                             <Button type="default" htmlType="button" onClick={()=> onChange("register")}>

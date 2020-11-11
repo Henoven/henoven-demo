@@ -1,0 +1,10 @@
+.Container{
+    background-color: "white";
+    width:"95%"; 
+    height:"40px"; 
+    border-radius:10; 
+    border-color:"black"; 
+    border-width:1;
+    font-size:18;
+    color:"#606060";
+}
