@@ -4,24 +4,64 @@ import CardTeam from '../../components/Cards/CardTeam';
 import { PlusCircleOutlined} from '@ant-design/icons';
 import axios from "../../axios";
 
-const NewTeamModal = ({ onCancel, onOk, visible}) =>{
-    const [TeamName, setTeamName] = useState("");
-    return(<Modal
-        title="Crear nuevo equipo"
-        visible={visible}
-        onOk={onOk}
-        onCancel={onCancel}
-        footer={[
-            <Button onClick={onCancel}>
-              Cancelar
-            </Button>,
-            <Button type="primary" onClick={onOk}>
-              Crear
-            </Button>,
-          ]}
-      >
-        <Input placeholder="Nombre de equipo" onChange={(value)=> {setTeamName(value); console.log(TeamName);}}/>
-      </Modal>);
+const NewTeamModal = ({ onCancel, userId, visible, refreshTeams}) =>{
+    
+    const [Loading, setLoading] = useState(false);
+    const [TeamName, setTeamName] = useState();
+    const handleCreateNewTeam = () =>{
+        if(!TeamName) {
+            message.error("Falta nombre de equipo");
+            return;
+        }
+        setLoading(true);
+        console.log("userid", userId);
+        const params = new URLSearchParams();
+        params.append("func", "Team-raut");
+        params.append("IdUserIS", userId);
+        params.append("args", JSON.stringify(
+            {
+                 IdTeam: 0, 
+                 TeamName: TeamName,
+            }));
+        axios.post("", params)
+        .then((response) => {
+            let validate = JSON.stringify(response)
+            if (validate.includes("User|Error")) {
+                const messageToShow = response.data.Echo.split(":")[1];
+                message.error(messageToShow);
+                setLoading(false);
+                return;
+            }
+            setLoading(false);
+            refreshTeams(true);
+            setTeamName("");
+            onCancel(); 
+        })
+        .catch(console.log("Error"))
+    };
+
+    return(
+        <Modal
+            title="Crear nuevo equipo"
+            visible={visible}
+            onCancel={onCancel}
+            footer={[
+                <Button onClick={onCancel}>
+                Cancelar
+                </Button>,
+                <Button loading={Loading}
+                type="primary" 
+                onClick={handleCreateNewTeam}>
+                Crear
+                </Button>,
+            ]}
+        >
+            <Input 
+            placeholder="Nombre de equipo" 
+            onChange={(e) => setTeamName(e.target.value)}
+            value={TeamName}/>
+        </Modal>
+        );
 }
 
 const Teams = ({user, ...rest}) =>{
@@ -29,6 +69,7 @@ const Teams = ({user, ...rest}) =>{
     const [isLoading, setIsLoading] = useState(false);
     const [teams, setTeams] = useState([]);
     const [isModalVisible, setIsModalVisible] = useState(false);
+    const [loadTeams, setLoadTeams] = useState(false);
 
     useEffect(() => {
       setIsLoading(true);
@@ -55,10 +96,9 @@ const Teams = ({user, ...rest}) =>{
       .catch((error) => {
           console.log(error);
       })
-    }, []);
+    }, [loadTeams]);
     const handleOnNewTeam = () =>{
         setIsModalVisible(true);
-        console.log("new team")
     } 
     const handleOnEditTeam = (idTeam) =>{
         console.log("edit team", idTeam)
@@ -79,7 +119,9 @@ return  (
 
     <>
         <NewTeamModal visible={isModalVisible} onOk={handleOk}
-        onCancel={handleCancel}/>
+        onCancel={handleCancel}
+        userId={user.IdUser}
+        refreshTeams={setLoadTeams}/>
         <Row align="middle" justify="end" style={{marginTop:10}}>
             <Tooltip title="Crear nuevo equipo">
                 <Button shape="circle" icon={<PlusCircleOutlined style={{color:"#3498db", fontSize:25}}

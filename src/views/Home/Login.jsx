@@ -1,11 +1,12 @@
 import React from 'react';
 import styles from "./home.module.css"
-import { Form, Input, Button, Image, message } from 'antd';
+import { Form, Input, Button, Image, message, Row, Col } from 'antd';
 import { sha256 } from "js-sha256";
 import axios from "../../axios";
 import { useHistory } from 'react-router-dom';
 
 const Login = ({onChange, doLogIn}) => {
+
     const history = useHistory();
 
     const onFinish = (values) => {
@@ -32,8 +33,9 @@ const Login = ({onChange, doLogIn}) => {
         })
         .catch(console.log("Error"))
       };
+
     const onFinishFailed = (errorInfo) => {
-    console.log('Failed:', errorInfo);
+        console.log('Failed:', errorInfo);
     };
 
     return (
@@ -72,14 +74,14 @@ const Login = ({onChange, doLogIn}) => {
                         >
                             <Input.Password placeholder="Contraseña"/>
                         </Form.Item>
-                        <Form.Item  name="remember" valuePropName="checked">
-                            <Button type="default" htmlType="button" onClick={()=> onChange("register")}>
-                                Registrarse
-                            </Button>
-                        </Form.Item>
                         <Form.Item>
                             <Button type="primary" htmlType="submit">
                                 Iniciar sesión
+                            </Button>
+                        </Form.Item>
+                        <Form.Item  name="remember" valuePropName="checked">
+                            <Button type="default" htmlType="button" onClick={()=> onChange("register")}>
+                                Registrarse
                             </Button>
                         </Form.Item>
                     </Form>
