@@ -1,17 +1,15 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState} from 'react';
 import { Layout, Menu, Image } from 'antd';
 import styles from "./mainPage.module.css";
 import { useHistory } from 'react-router-dom';
 
 import {
-    HomeOutlined,
     GlobalOutlined,
     TeamOutlined,
     MobileOutlined,
     SettingOutlined
   } from '@ant-design/icons';
 
-const { SubMenu } = Menu;
 const { Header, Content, Footer, Sider } = Layout;
 
 const MainPage = ({children}) =>{

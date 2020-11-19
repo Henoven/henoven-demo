@@ -1,5 +1,5 @@
 import React from 'react';
-import {Row, Col, Button, Tooltip} from "antd";
+import {Row, Col, Button, Tooltip, Popconfirm} from "antd";
 import { EditOutlined, LogoutOutlined } from '@ant-design/icons';
 import styles from "./cardTeam.module.css"
 
@@ -16,8 +16,15 @@ const CardTeam = ({title, onEdit, onExit, idTeam,...rest}) =>{
                         onClick={()=> onEdit(idTeam)}/>} />
                     </Tooltip>
                     <Tooltip title="Salir">
-                        <Button shape="circle" icon={<LogoutOutlined style={{color:"#e74d3d"}}
-                        onClick={()=> onExit(idTeam)}/>} />
+                        <Popconfirm 
+                        placement="topLeft"
+                        title="¿Seguro que quieres salir del equipo?"
+                        onConfirm={()=>onExit(idTeam)}
+                        okText="Sí"
+                        cancelText="No"
+                        >
+                            <Button shape="circle" icon={<LogoutOutlined style={{color:"#e74d3d"}}/>} />
+                        </Popconfirm>
                     </Tooltip>
                 </Row>
             </Col>            

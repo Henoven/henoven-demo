@@ -1,13 +1,13 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 // Views
-import Teams from '../views/Teams/Teams';
+import TeamsPage from '../views/Teams/TeamsPage';
 
 class TeamsContainer extends Component {
     render() {
         return (
             <>
-                <Teams {...this.props}/>
+                <TeamsPage {...this.props}/>
             </>
         );
     }

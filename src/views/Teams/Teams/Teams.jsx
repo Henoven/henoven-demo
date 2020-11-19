@@ -1,20 +1,21 @@
 import React, {useState, useEffect} from 'react';
 import { List, message, Tooltip, Button, Row, Modal, Input } from 'antd';
-import CardTeam from '../../components/Cards/CardTeam';
+import CardTeam from '../../../components/Cards/CardTeam';
 import { PlusCircleOutlined} from '@ant-design/icons';
-import axios from "../../axios";
+import axios from "../../../axios";
+import { useHistory } from 'react-router-dom';
 
 const NewTeamModal = ({ onCancel, userId, visible, refreshTeams}) =>{
     
     const [Loading, setLoading] = useState(false);
     const [TeamName, setTeamName] = useState();
+
     const handleCreateNewTeam = () =>{
         if(!TeamName) {
             message.error("Falta nombre de equipo");
             return;
         }
         setLoading(true);
-        console.log("userid", userId);
         const params = new URLSearchParams();
         params.append("func", "Team-raut");
         params.append("IdUserIS", userId);
@@ -66,6 +67,8 @@ const NewTeamModal = ({ onCancel, userId, visible, refreshTeams}) =>{
 
 const Teams = ({user, ...rest}) =>{
     
+    const history = useHistory();
+
     const [isLoading, setIsLoading] = useState(false);
     const [teams, setTeams] = useState([]);
     const [isModalVisible, setIsModalVisible] = useState(false);
@@ -96,15 +99,36 @@ const Teams = ({user, ...rest}) =>{
       .catch((error) => {
           console.log(error);
       })
+      setLoadTeams(false);
     }, [loadTeams]);
     const handleOnNewTeam = () =>{
         setIsModalVisible(true);
     } 
     const handleOnEditTeam = (idTeam) =>{
         console.log("edit team", idTeam)
+        history.push(`/teams/${idTeam}`);
     } 
     const handleOnExitTeam = (idTeam) =>{
         console.log("exit team", idTeam)
+        if(!idTeam) return;
+        const params = new URLSearchParams();
+        params.append("func", "Team-lt");
+        params.append("IdUserIS", user.IdUser);
+        params.append("args", JSON.stringify(
+            {
+                 IdTeam: idTeam, 
+            }));
+        axios.post("", params)
+        .then((response) => {
+            let validate = JSON.stringify(response);
+            if (validate.includes("User|Error")) {
+                const messageToShow = response.data.Echo.split(":")[1];
+                message.error(messageToShow);
+                return;
+            }
+            setLoadTeams(true);
+        })
+        .catch(console.log("Error")) 
     } 
     const handleOk = (newTeamName) => {
         console.log(newTeamName);
