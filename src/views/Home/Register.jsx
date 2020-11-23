@@ -4,6 +4,7 @@ import { Form, Input, Button, Image, message } from 'antd';
 import { sha256 } from "js-sha256";
 import axios from '../../axios';
 import { useHistory } from 'react-router-dom';
+import { MailOutlined, LockOutlined, UserOutlined } from '@ant-design/icons';
 
 const Register = ({onChange, doLogIn}) => {
     const history = useHistory();
@@ -67,7 +68,8 @@ const Register = ({onChange, doLogIn}) => {
                             },
                         ]}
                         >
-                            <Input placeholder="Nombre/s"/>
+                            <Input placeholder="Nombre/s"
+                                prefix={<UserOutlined className="site-form-item-icon" />}/>
                         </Form.Item>
                         <Form.Item
                         name="lastName"
@@ -78,7 +80,8 @@ const Register = ({onChange, doLogIn}) => {
                             },
                         ]}
                         >
-                            <Input placeholder="Apellido/s"/>
+                            <Input placeholder="Apellido/s"
+                            prefix={<UserOutlined className="site-form-item-icon" />}/>
                         </Form.Item>
                         <Form.Item
                         name="email"
@@ -89,7 +92,8 @@ const Register = ({onChange, doLogIn}) => {
                             },
                         ]}
                         >
-                            <Input placeholder="Email"/>
+                            <Input placeholder="Email"
+                            prefix={<MailOutlined className="site-form-item-icon" />}/>
                         </Form.Item>
                         <Form.Item
                         name="password1"
@@ -100,7 +104,8 @@ const Register = ({onChange, doLogIn}) => {
                             },
                         ]}
                         >
-                            <Input.Password placeholder="Contraseña"/>
+                            <Input.Password placeholder="Contraseña"
+                            prefix={<LockOutlined className="site-form-item-icon" />}/>
                         </Form.Item>
                         <Form.Item
                         name="password2"
@@ -111,7 +116,8 @@ const Register = ({onChange, doLogIn}) => {
                             },
                         ]}
                         >
-                            <Input.Password placeholder="Confirmar contraseña"/>
+                            <Input.Password placeholder="Confirmar contraseña"
+                            prefix={<LockOutlined className="site-form-item-icon" />}/>
                         </Form.Item>
                         <Form.Item>
                             <Button type="default" htmlType="button" onClick={()=> onChange("login")}>

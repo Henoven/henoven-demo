@@ -1,9 +1,10 @@
 import React from 'react';
 import styles from "./home.module.css"
-import { Form, Input, Button, Image, message, Row, Col } from 'antd';
+import { Form, Input, Button, Image, message, } from 'antd';
 import { sha256 } from "js-sha256";
 import axios from "../../axios";
 import { useHistory } from 'react-router-dom';
+import { MailOutlined, LockOutlined } from '@ant-design/icons';
 
 const Login = ({onChange, doLogIn}) => {
 
@@ -61,7 +62,8 @@ const Login = ({onChange, doLogIn}) => {
                             },
                         ]}
                         >
-                            <Input placeholder="Email"/>
+                            <Input placeholder="Email"
+                                 prefix={<MailOutlined className="site-form-item-icon" />}/>
                         </Form.Item>
                         <Form.Item
                         name="password"
@@ -72,7 +74,8 @@ const Login = ({onChange, doLogIn}) => {
                             },
                         ]}
                         >
-                            <Input.Password placeholder="Contraseña"/>
+                            <Input.Password placeholder="Contraseña"
+                                            prefix={<LockOutlined className="site-form-item-icon" />}/>
                         </Form.Item>
                         <Form.Item>
                             <Button type="primary" htmlType="submit">
