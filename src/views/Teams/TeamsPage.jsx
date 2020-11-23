@@ -32,14 +32,14 @@ const TeamsPage =({histoy, user})=> {
             </Row>
             <Switch>
                 <Route 
-                    path="/teams/:idTeam" 
+                    path="/teams/:idTeam"
                     exact 
                     render={() => 
                         <TeamDetail
                         />
                     }
                 />
-                <Route render={() => renderOption()} />
+                <Route path="/teams" render={() => renderOption()} />
             </Switch>
         </>
     );

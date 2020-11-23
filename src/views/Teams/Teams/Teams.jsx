@@ -1,77 +1,20 @@
 import React, {useState, useEffect} from 'react';
-import { List, message, Tooltip, Button, Row, Modal, Input } from 'antd';
+import { List, message, Tooltip, Button, Row} from 'antd';
 import CardTeam from '../../../components/Cards/CardTeam';
 import { PlusCircleOutlined} from '@ant-design/icons';
 import axios from "../../../axios";
-import { useHistory } from 'react-router-dom';
+import { withRouter } from 'react-router-dom';
 
-const NewTeamModal = ({ onCancel, userId, visible, refreshTeams}) =>{
-    
-    const [Loading, setLoading] = useState(false);
-    const [TeamName, setTeamName] = useState();
-
-    const handleCreateNewTeam = () =>{
-        if(!TeamName) {
-            message.error("Falta nombre de equipo");
-            return;
-        }
-        setLoading(true);
-        const params = new URLSearchParams();
-        params.append("func", "Team-raut");
-        params.append("IdUserIS", userId);
-        params.append("args", JSON.stringify(
-            {
-                 IdTeam: 0, 
-                 TeamName: TeamName,
-            }));
-        axios.post("", params)
-        .then((response) => {
-            let validate = JSON.stringify(response)
-            if (validate.includes("User|Error")) {
-                const messageToShow = response.data.Echo.split(":")[1];
-                message.error(messageToShow);
-                setLoading(false);
-                return;
-            }
-            setLoading(false);
-            refreshTeams(true);
-            setTeamName("");
-            onCancel(); 
-        })
-        .catch(console.log("Error"))
-    };
-
-    return(
-        <Modal
-            title="Crear nuevo equipo"
-            visible={visible}
-            onCancel={onCancel}
-            footer={[
-                <Button onClick={onCancel}>
-                Cancelar
-                </Button>,
-                <Button loading={Loading}
-                type="primary" 
-                onClick={handleCreateNewTeam}>
-                Crear
-                </Button>,
-            ]}
-        >
-            <Input 
-            placeholder="Nombre de equipo" 
-            onChange={(e) => setTeamName(e.target.value)}
-            value={TeamName}/>
-        </Modal>
-        );
-}
+import NewTeamModal from "../Modals/NewTeamModal";
+import EditTeamModal from "../Modals/EditTeamModal";
 
 const Teams = ({user, ...rest}) =>{
     
-    const history = useHistory();
-
     const [isLoading, setIsLoading] = useState(false);
     const [teams, setTeams] = useState([]);
+    const [teamSelected, setTeamSelected] = useState({IdTeam:"", TeamName:"", IdOwner:""});
     const [isModalVisible, setIsModalVisible] = useState(false);
+    const [isModalTeamVisible, setIsModalTeamVisible] = useState(false);
     const [loadTeams, setLoadTeams] = useState(false);
 
     useEffect(() => {
@@ -105,8 +48,12 @@ const Teams = ({user, ...rest}) =>{
         setIsModalVisible(true);
     } 
     const handleOnEditTeam = (idTeam) =>{
-        console.log("edit team", idTeam)
-        history.push(`/teams/${idTeam}`);
+        if(!idTeam) return;
+        const team = teams.find(x => x.IdTeam === idTeam)
+        setTeamSelected({TeamName: team.TeamName,
+                         IdTeam:team.IdTeam,
+                         IdOwner:team.IdOwner});
+        setIsModalTeamVisible(true);
     } 
     const handleOnExitTeam = (idTeam) =>{
         console.log("exit team", idTeam)
@@ -135,16 +82,17 @@ const Teams = ({user, ...rest}) =>{
         setIsModalVisible(false);
       };
     
-     const handleCancel = e => {
-        setIsModalVisible(false);
-      };
-    
 return  (
 
     <>
         <NewTeamModal visible={isModalVisible} onOk={handleOk}
-        onCancel={handleCancel}
+        onCancel={() => setIsModalVisible(false)}
         userId={user.IdUser}
+        refreshTeams={setLoadTeams}/>
+        <EditTeamModal visible={isModalTeamVisible} onOk={handleOk}
+        onCancel={() => setIsModalTeamVisible(false)}
+        userId={user.IdUser}
+        team={teamSelected}
         refreshTeams={setLoadTeams}/>
         <Row align="middle" justify="end" style={{marginTop:10}}>
             <Tooltip title="Crear nuevo equipo">
@@ -168,4 +116,4 @@ return  (
     </>
 );
 }
-export default Teams;
+export default withRouter(Teams);
