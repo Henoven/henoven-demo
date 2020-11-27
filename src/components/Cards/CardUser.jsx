@@ -4,6 +4,7 @@ import { DeleteOutlined } from '@ant-design/icons';
 import styles from "./cardTeam.module.css"
 
 const CardUser = ({title, onChange, onDeleteTeammate, user, canUserSeeDetailTravel}) =>{
+    console.log("user", user);
     
     return(
         <Row style={{backgroundColor: "white", width:"100%", height:"40px", fontSize:15, color:"#606060"}} align="middle">
@@ -11,7 +12,7 @@ const CardUser = ({title, onChange, onDeleteTeammate, user, canUserSeeDetailTrav
                 <span style={{marginLeft:25, textAlign:"center"}}>{title}</span>
             </Col>
             <Col flex="auto">
-                <Checkbox onChange={(e)=> onChange(e, user.id)}
+                <Checkbox onChange={(e)=> onChange(e, user.IdUser)}
                         checked={canUserSeeDetailTravel}>Ver detalle de viaje</Checkbox>
             </Col>
             <Col flex={1}>

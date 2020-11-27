@@ -2,7 +2,7 @@ import React, {useState} from 'react';
 import { Modal, Input, Button, message } from "antd";
 import axios from "../../../axios";
 
-const NewTeamModal = ({ onCancel, userId, visible, refreshTeams}) =>{
+const NewTeamModal = ({ onClose, userId, refreshTeams}) =>{
     
     const [Loading, setLoading] = useState(false);
     const [TeamName, setTeamName] = useState();
@@ -33,18 +33,20 @@ const NewTeamModal = ({ onCancel, userId, visible, refreshTeams}) =>{
             setLoading(false);
             refreshTeams(true);
             setTeamName("");
-            onCancel(); 
+            onClose(); 
         })
-        .catch(console.log("Error"))
+        .catch((error) => {
+            console.log("Error", error);
+        })
     };
 
     return(
         <Modal
             title="Crear nuevo equipo"
-            visible={visible}
-            onCancel={onCancel}
+            visible
+            onCancel={onClose}
             footer={[
-                <Button onClick={onCancel}>
+                <Button onClick={onClose}>
                 Cancelar
                 </Button>,
                 <Button loading={Loading}

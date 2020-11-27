@@ -8,14 +8,36 @@ import { withRouter } from 'react-router-dom';
 import NewTeamModal from "../Modals/NewTeamModal";
 import EditTeamModal from "../Modals/EditTeamModal";
 
+
 const Teams = ({user, ...rest}) =>{
     
     const [isLoading, setIsLoading] = useState(false);
     const [teams, setTeams] = useState([]);
     const [teamSelected, setTeamSelected] = useState({IdTeam:"", TeamName:"", IdOwner:""});
-    const [isModalVisible, setIsModalVisible] = useState(false);
-    const [isModalTeamVisible, setIsModalTeamVisible] = useState(false);
+    const [Modal, setModal] = useState(null);
     const [loadTeams, setLoadTeams] = useState(false);
+    const [LoadInfoTeam, setLoadInfoTeam] = useState(false);
+    
+    const handleOk = (newTeamName) => {
+        console.log(newTeamName);
+        setModal(null);
+    };
+
+    const Modals = {
+        "newTeamModal": <NewTeamModal  
+                        onOk={handleOk}
+                        onClose={()=> setModal(null)}
+                        userId={user.IdUser}
+                        disabled={false}
+                        refreshTeams={setLoadTeams}/>,
+        "editTeamModal": <EditTeamModal 
+                        onOk={handleOk}
+                        onClose={()=> setModal(null)}
+                        IdUser={user.IdUser}
+                        IdTeam={teamSelected.IdTeam}
+                        disabled={false}
+                        refreshTeams={setLoadTeams}/>,
+    }
 
     useEffect(() => {
       setIsLoading(true);
@@ -31,21 +53,20 @@ const Teams = ({user, ...rest}) =>{
               message.error(messageToShow[1]);
           }
           else{
-            console.log(response.data);
               const { Teams, Invitations } = response.data;
-              console.log(Teams);
-              if(teams) {
+              if(Teams) {
                   setTeams(Teams);
               }
           }
       })
       .catch((error) => {
-          console.log(error);
+        console.log("Error", error);
       })
       setLoadTeams(false);
+      setLoadInfoTeam(false);
     }, [loadTeams]);
     const handleOnNewTeam = () =>{
-        setIsModalVisible(true);
+        setModal("newTeamModal");
     } 
     const handleOnEditTeam = (idTeam) =>{
         if(!idTeam) return;
@@ -53,10 +74,10 @@ const Teams = ({user, ...rest}) =>{
         setTeamSelected({TeamName: team.TeamName,
                          IdTeam:team.IdTeam,
                          IdOwner:team.IdOwner});
-        setIsModalTeamVisible(true);
+        setLoadInfoTeam(true);
+        setModal("editTeamModal");
     } 
     const handleOnExitTeam = (idTeam) =>{
-        console.log("exit team", idTeam)
         if(!idTeam) return;
         const params = new URLSearchParams();
         params.append("func", "Team-lt");
@@ -75,25 +96,15 @@ const Teams = ({user, ...rest}) =>{
             }
             setLoadTeams(true);
         })
-        .catch(console.log("Error")) 
+        .catch((error) => {
+            console.log("Error", error);
+        })
     } 
-    const handleOk = (newTeamName) => {
-        console.log(newTeamName);
-        setIsModalVisible(false);
-      };
     
 return  (
 
     <>
-        <NewTeamModal visible={isModalVisible} onOk={handleOk}
-        onCancel={() => setIsModalVisible(false)}
-        userId={user.IdUser}
-        refreshTeams={setLoadTeams}/>
-        <EditTeamModal visible={isModalTeamVisible} onOk={handleOk}
-        onCancel={() => setIsModalTeamVisible(false)}
-        userId={user.IdUser}
-        team={teamSelected}
-        refreshTeams={setLoadTeams}/>
+        { Modals[Modal] }
         <Row align="middle" justify="end" style={{marginTop:10}}>
             <Tooltip title="Crear nuevo equipo">
                 <Button shape="circle" icon={<PlusCircleOutlined style={{color:"#3498db", fontSize:25}}
