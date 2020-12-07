@@ -77,14 +77,14 @@ const Login = ({onChange, doLogIn}) => {
                             <Input.Password placeholder="Contraseña"
                                             prefix={<LockOutlined className="site-form-item-icon" />}/>
                         </Form.Item>
-                        <Form.Item>
-                            <Button type="primary" htmlType="submit">
-                                Iniciar sesión
-                            </Button>
-                        </Form.Item>
                         <Form.Item  name="remember" valuePropName="checked">
                             <Button type="default" htmlType="button" onClick={()=> onChange("register")}>
                                 Registrarse
+                            </Button>
+                        </Form.Item>
+                        <Form.Item>
+                            <Button type="primary" htmlType="submit">
+                                Iniciar sesión
                             </Button>
                         </Form.Item>
                     </Form>

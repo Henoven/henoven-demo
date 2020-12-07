@@ -20,7 +20,9 @@ const EditTeamModal = ({ onClose, IdUser, IdTeam, refreshTeams}) =>{
     const [newTeammate, setNewTeammate] = useState();
     const [isLoading, setIsLoading] = useState(false);
     const [users, setUsers] = useState([]);
-    const [Team, setTeam] = useState({TeamName:"", TeamId:"", IdOwner:""});
+    const [Team, setTeam] = useState({});
+
+    console.log(Team, "equipo");
 
     useEffect(() => {
         if(!IdTeam) return;
@@ -39,10 +41,9 @@ const EditTeamModal = ({ onClose, IdUser, IdTeam, refreshTeams}) =>{
             }
             else{
                 console.log(response.data.TeamInfo);
-                const {TeamInfo} = response.data;
-                setTeam({TeamId: TeamInfo.TeamId, TeamName: TeamInfo.TeamName, IdOwner: TeamInfo.IdOwner});
-                console.log(Team);
-                setUsers(response.data.TeamMembers);
+                const {TeamInfo, TeamMembers} = response.data;
+                setTeam(TeamInfo);
+                setUsers(TeamMembers);
             }
             
         })
@@ -56,9 +57,31 @@ const EditTeamModal = ({ onClose, IdUser, IdTeam, refreshTeams}) =>{
         console.log(`user = ${userId}`);
     }
     const handleAddTeammate = () =>{
-        const usersTeam = users;
-        usersTeam.push({id:4, name: newTeammate, permissions:true })
-        setUsers(usersTeam);
+        
+        if(!newTeammate) return;
+        const params = new URLSearchParams();
+        params.append("func", "Team-iu");
+        params.append("IdUserIS", IdUser);
+        params.append("args", JSON.stringify(
+            {
+                 IdTeam: IdTeam,
+                 Email: newTeammate 
+            }));
+        axios.post("", params)
+        .then((response) => {
+            let validate = JSON.stringify(response);
+            if (validate.includes("User|Error")) {
+                const messageToShow = response.data.Echo.split(":")[1];
+                message.success(messageToShow);
+                return;
+            }
+            else{
+                message.error("No se encontró el usuario");
+            }
+        })
+        .catch((error) => {
+            console.log("Error", error);
+        })
         setNewTeammate("");
         console.log(users);
     }
