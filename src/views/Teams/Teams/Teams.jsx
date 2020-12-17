@@ -9,13 +9,11 @@ import NewTeamModal from "../Modals/NewTeamModal";
 import EditTeamModal from "../Modals/EditTeamModal";
 
 
-const Teams = ({user, ...rest}) =>{
+const Teams = ({user,teams, setInvitations, isLoading, setRefresh, ...rest}) =>{
     
-    const [isLoading, setIsLoading] = useState(false);
-    const [teams, setTeams] = useState([]);
     const [teamSelected, setTeamSelected] = useState({IdTeam:"", TeamName:"", IdOwner:""});
     const [Modal, setModal] = useState(null);
-    const [loadTeams, setLoadTeams] = useState(false);
+    
     const [LoadInfoTeam, setLoadInfoTeam] = useState(false);
     
     const handleOk = (newTeamName) => {
@@ -29,42 +27,17 @@ const Teams = ({user, ...rest}) =>{
                         onClose={()=> setModal(null)}
                         userId={user.IdUser}
                         disabled={false}
-                        refreshTeams={setLoadTeams}/>,
+                        refreshTeams={setRefresh}/>,
         "editTeamModal": <EditTeamModal 
                         onOk={handleOk}
                         onClose={()=> setModal(null)}
                         IdUser={user.IdUser}
                         IdTeam={teamSelected.IdTeam}
                         disabled={false}
-                        refreshTeams={setLoadTeams}/>,
+                        refreshTeams={setRefresh}/>,
     }
 
-    useEffect(() => {
-      setIsLoading(true);
-      const params = new URLSearchParams();
-      params.append("func", "Team-gutai");
-      params.append("IdUserIS", user.IdUser);
-      axios.post("", params)
-      .then((response) => {
-          setIsLoading(false);
-          const messageFromDB = response.data.Echo !== null ? response.data.Echo : "";
-          if(messageFromDB){
-              const messageToShow =  response.data.Echo.split(":");
-              message.error(messageToShow[1]);
-          }
-          else{
-              const { Teams, Invitations } = response.data;
-              if(Teams) {
-                  setTeams(Teams);
-              }
-          }
-      })
-      .catch((error) => {
-        console.log("Error", error);
-      })
-      setLoadTeams(false);
-      setLoadInfoTeam(false);
-    }, [loadTeams]);
+    
     const handleOnNewTeam = () =>{
         setModal("newTeamModal");
     } 
@@ -94,7 +67,7 @@ const Teams = ({user, ...rest}) =>{
                 message.error(messageToShow);
                 return;
             }
-            setLoadTeams(true);
+            setRefresh(true);
         })
         .catch((error) => {
             console.log("Error", error);

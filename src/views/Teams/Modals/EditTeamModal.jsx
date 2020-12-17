@@ -7,12 +7,6 @@ import CardUser from '../../../components/Cards/CardUser';
 const {Search} = Input;
 const {Title} = Typography;
 
-const initUsers = [
-    {id:1, name:"Sebastián Rodríguez Maldonado", permissions:false},
-    {id:2, name:"Santiago Angelini Wintergerst", permissions:true},
-    {id:3, name:"Luis Daniel Guerra Rosales", permissions:true},
-];
-
 const EditTeamModal = ({ onClose, IdUser, IdTeam, refreshTeams}) =>{
     
     const [Loading, setLoading] = useState(false);
@@ -22,9 +16,11 @@ const EditTeamModal = ({ onClose, IdUser, IdTeam, refreshTeams}) =>{
     const [users, setUsers] = useState([]);
     const [Team, setTeam] = useState({});
 
-    console.log(Team, "equipo");
-
     useEffect(() => {
+        getTeamInfo();
+      },[IdUser, IdTeam]);
+
+    const getTeamInfo = () =>{
         if(!IdTeam) return;
         const params = new URLSearchParams();
         params.append("func", "Team-gti");
@@ -32,7 +28,6 @@ const EditTeamModal = ({ onClose, IdUser, IdTeam, refreshTeams}) =>{
         params.append("IdUserIS", IdUser);
         axios.post("", params)
         .then((response) => {
-            console.log("response");
             let validate = JSON.stringify(response);
             if (validate.includes("User|Error")) {
                 const messageToShow = response.data.Echo.split(":")[1];
@@ -40,24 +35,21 @@ const EditTeamModal = ({ onClose, IdUser, IdTeam, refreshTeams}) =>{
                 return;
             }
             else{
-                console.log(response.data.TeamInfo);
                 const {TeamInfo, TeamMembers} = response.data;
                 setTeam(TeamInfo);
                 setUsers(TeamMembers);
             }
-            
         })
         .catch((error) => {
           console.log("Error", error);
         })
-      },[IdUser, IdTeam]);
+    }
 
     const handlePermission = (e, userId) =>{
         console.log(`checked = ${e.target.checked}`);
         console.log(`user = ${userId}`);
     }
     const handleAddTeammate = () =>{
-        
         if(!newTeammate) return;
         const params = new URLSearchParams();
         params.append("func", "Team-iu");
@@ -70,9 +62,14 @@ const EditTeamModal = ({ onClose, IdUser, IdTeam, refreshTeams}) =>{
         axios.post("", params)
         .then((response) => {
             let validate = JSON.stringify(response);
-            if (validate.includes("User|Error")) {
-                const messageToShow = response.data.Echo.split(":")[1];
-                message.success(messageToShow);
+            const messageToShow = response.data.Echo.split(":")[1];
+            if (validate.includes("User|")) {
+                if(validate.includes("Error")){
+                    message.error(messageToShow);
+                }
+                else{
+                    message.success(messageToShow);
+                }
                 return;
             }
             else{
@@ -85,9 +82,35 @@ const EditTeamModal = ({ onClose, IdUser, IdTeam, refreshTeams}) =>{
         setNewTeammate("");
         console.log(users);
     }
-    const handleOnDeleteTeammate = (idUser) =>{
-        if(!idUser) return;
-        console.log(idUser);
+    const handleOnDeleteTeammate = (userToExpell) =>{
+        if(!userToExpell) return;
+        const params = new URLSearchParams();
+        params.append("func", "Team-euft");
+        params.append("IdUserIS", IdUser);
+        params.append("args", JSON.stringify(
+            {
+                IdUserToExpell: userToExpell.IdUser,
+                IdTeam, 
+            }));
+        axios.post("", params)
+        .then((response) => {
+            let validate = JSON.stringify(response);
+            const messageToShow = response.data.Echo.split(":")[1];
+            if (validate.includes("User|Error")) {
+                if(validate.includes("Error")){
+                    message.error(messageToShow);
+                    return;
+                }
+                else{
+                    message.success(messageToShow);
+                }
+            }
+            let teamMembers = users.filter( user => user.IdUser !== userToExpell.IdUser);
+            setUsers(teamMembers);
+        })
+        .catch((error) => {
+            console.log("Error", error);
+        })
     }
     const handleDeleteTeam = () =>{
         if(!IdTeam) return;
@@ -157,19 +180,19 @@ const EditTeamModal = ({ onClose, IdUser, IdTeam, refreshTeams}) =>{
                 </Row>
                 <Divider style={{marginTop:0}}></Divider>
                 <List
-                itemLayout="horizontal"
-                loading = {isLoading}
-                dataSource={users}
-                key={(user) => user.IdUser.toString()}
-                renderItem={item => (
+                    itemLayout="horizontal"
+                    loading = {isLoading}
+                    dataSource={users}
+                    key={(user) => user.IdUser.toString()}
+                    renderItem={item => (
                     <List.Item 
-                    style={{paddingBottom:1}}>
+                        style={{paddingBottom:1}}>
                        <CardUser 
-                                title={item.FirstName + " " +item.LastName} 
-                                user={item}
-                                canUserSeeDetailTravel={item.Permissions}
-                                onChange={handlePermission}
-                                onDeleteTeammate={handleOnDeleteTeammate}/>
+                            title={item.FirstName + " " +item.LastName} 
+                            user={item}
+                            canUserSeeDetailTravel={item.Permissions}
+                            onChange={()=>handlePermission}
+                            onDeleteTeammate={(value)=>handleOnDeleteTeammate(value)}/>
                     </List.Item>
                     )}
                 />
