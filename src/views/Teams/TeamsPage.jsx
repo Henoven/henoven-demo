@@ -1,6 +1,6 @@
 import React, {useState, useEffect} from 'react';
 import { withRouter, Route, Switch } from 'react-router-dom';
-import { Row, Button, Divider, message } from 'antd';
+import { Row, Button, Divider, message, Badge } from 'antd';
 
 import Teams from './Teams/Teams';
 import InvitationsTeam from './InvitationsTeam/InvitationsTeam';
@@ -49,19 +49,22 @@ const TeamsPage =({histoy, user})=> {
                         onChange = {(path) => setViewSelected(path) } 
                         histoy = {histoy}
                         teams = {teams}
-                        setTeams = {setTeams} 
-                        user={user}
+                        setTeams = {setTeams}
+                        setInvitations = {setInvitations} 
                         isLoading = {isLoading}
                         setRefresh={setLoadTeams}
+                        user={user}
                     />
                 );
             case "invitationsTeam":
                 return (
                     <InvitationsTeam
-                        invitaions = {invitations}
+                        invitations = {invitations}
+                        setTeams = {setTeams} 
                         setInvitations = {setInvitations}
                         isLoading = {isLoading}
                         setRefresh={setLoadTeams}
+                        user={user}
                     />
                 )
         
@@ -77,11 +80,13 @@ const TeamsPage =({histoy, user})=> {
                     onClick={()=> setViewSelected("teams")}>
                         Equipos
                 </Button>
-                <Button  
-                    size="large" 
-                    onClick={()=> setViewSelected("invitationsTeam")}>
-                        Invitaciones
-                </Button>
+                <Badge count={invitations ? invitations.length : 0}>
+                    <Button  
+                        size="large" 
+                        onClick={()=> setViewSelected("invitationsTeam")}>
+                            Invitaciones
+                    </Button>
+                </Badge>
             </Row>
             <Divider style={{marginTop:5}}/>
             <Switch>

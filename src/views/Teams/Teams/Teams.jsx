@@ -9,7 +9,7 @@ import NewTeamModal from "../Modals/NewTeamModal";
 import EditTeamModal from "../Modals/EditTeamModal";
 
 
-const Teams = ({user,teams, setInvitations, isLoading, setRefresh, ...rest}) =>{
+const Teams = ({user, teams, setInvitations, isLoading, setRefresh, ...rest}) =>{
     
     const [teamSelected, setTeamSelected] = useState({IdTeam:"", TeamName:"", IdOwner:""});
     const [Modal, setModal] = useState(null);

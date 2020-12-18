@@ -96,7 +96,7 @@ const EditTeamModal = ({ onClose, IdUser, IdTeam, refreshTeams}) =>{
         .then((response) => {
             let validate = JSON.stringify(response);
             const messageToShow = response.data.Echo.split(":")[1];
-            if (validate.includes("User|Error")) {
+            if (validate.includes("User")) {
                 if(validate.includes("Error")){
                     message.error(messageToShow);
                     return;
