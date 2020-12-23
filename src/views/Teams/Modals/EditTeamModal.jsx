@@ -10,11 +10,11 @@ const {Title} = Typography;
 const EditTeamModal = ({ onClose, IdUser, IdTeam, refreshTeams}) =>{
     
     const [Loading, setLoading] = useState(false);
-    const [TeamName, setTeamName] = useState();
+    const [Team, setTeam] = useState({});
+    const [teamName, setTeamName] = useState();
     const [newTeammate, setNewTeammate] = useState();
     const [isLoading, setIsLoading] = useState(false);
     const [users, setUsers] = useState([]);
-    const [Team, setTeam] = useState({});
 
     useEffect(() => {
         getTeamInfo();
@@ -37,6 +37,7 @@ const EditTeamModal = ({ onClose, IdUser, IdTeam, refreshTeams}) =>{
             else{
                 const {TeamInfo, TeamMembers} = response.data;
                 setTeam(TeamInfo);
+                setTeamName(TeamInfo.TeamName);
                 setUsers(TeamMembers);
             }
         })
@@ -119,7 +120,7 @@ const EditTeamModal = ({ onClose, IdUser, IdTeam, refreshTeams}) =>{
         params.append("IdUserIS", IdUser);
         params.append("args", JSON.stringify(
             {
-                 IdTeam: IdTeam, 
+                IdTeam, 
             }));
         axios.post("", params)
         .then((response) => {
@@ -136,47 +137,90 @@ const EditTeamModal = ({ onClose, IdUser, IdTeam, refreshTeams}) =>{
             console.log("Error", error);
         })
     }
+    function handleChangeNameTeam(){
+        const params = new URLSearchParams();
+        params.append("func", "Team-raut");
+        params.append("IdUserIS", IdUser);
+        params.append("args", JSON.stringify(
+            {
+                IdTeam,
+                TeamName: teamName, 
+            }));
+        axios.post("", params)
+        .then((response) => {
+            let validate = JSON.stringify(response);
+            const messageToShow = response.data.Echo.split(":")[1];
+            if (validate.includes("User")) {
+                if(validate.includes("Error")){
+                    message.error(messageToShow);
+                    return;
+                }
+                else{
+                    message.success(messageToShow);
+                }
+            }
+            onClose();
+            refreshTeams(true);
+        })
+        .catch((error) => {
+            console.log("Error", error);
+        })
+    }
 
     return(
         <Modal
             width="60%"
-            title={Team.TeamName}
             visible
             onCancel={onClose}
             footer={[
                 <Popconfirm 
-                        placement="topLeft"
-                        title="¿Seguro que quieres eliminar el equipo?"
-                        okText="Sí"
-                        onConfirm={handleDeleteTeam}
-                        cancelText="No"
-                        >
-                            <Button type="primary" danger>
-                                Eliminar equipo
-                            </Button>
-                        </Popconfirm>,
+                    placement="topLeft"
+                    title="¿Seguro que quieres eliminar el equipo?"
+                    okText="Sí"
+                    onConfirm={handleDeleteTeam}
+                    cancelText="No"
+                    >
+                    <Button type="primary" danger>
+                        Eliminar equipo
+                    </Button>
+                </Popconfirm>,
                 <Button onClick={onClose}>
                 Cancelar
                 </Button>,
-                <Button loading={Loading}
-                type="primary" >
+                <Button 
+                    loading={Loading}
+                    type="primary" 
+                    onClick={() => handleChangeNameTeam()}>
                 Guardar
                 </Button>,
             ]}
         >
             <>
+                <Input 
+                    bordered={false} 
+                    placeholder="Escriba el nombre del equipo" 
+                    value={teamName}
+                    onChange={(e) => setTeamName(e.target.value)}
+                    size="large" 
+                    style={{
+                        marginLeft:0,
+                        marginTop:30, 
+                        marginBottom:10, 
+                        placeholderColor:"black"
+                    }}/>
                 <Row  align="middle">
                     <Search
-                    size="middle"
-                    placeholder="Ingresa un correo para añadirlo a tu equipo"
-                    enterButton="Agregar" 
-                    onChange={(e) => setNewTeammate(e.target.value)}
-                    onSearch={handleAddTeammate}
-                    value={newTeammate}/>
+                        size="middle"
+                        placeholder="Ingresa un correo para añadirlo a tu equipo"
+                        enterButton="Agregar" 
+                        onChange={(e) => setNewTeammate(e.target.value)}
+                        onSearch={handleAddTeammate}
+                        value={newTeammate}/>
                 </Row>
                 <Row style={{marginTop:20}}>
-                    <Title type="secondary"
-                    level={5}>Usuarios</Title>
+                    <Title 
+                        type="secondary"
+                        level={5}>Usuarios</Title>
                 </Row>
                 <Divider style={{marginTop:0}}></Divider>
                 <List

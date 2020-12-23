@@ -1,35 +1,59 @@
-import React from 'react';
+import React, { useState } from 'react';
 import {Row, Col, Button, Tooltip, Popconfirm, Checkbox} from "antd";
-import { DeleteOutlined } from '@ant-design/icons';
+import { PlusOutlined, DeleteOutlined} from '@ant-design/icons';
 import styles from "./cardTeam.module.css"
 
 const CardUser = ({title, onChange, onDeleteTeammate, user, canUserSeeDetailTravel}) =>{
     
+    const [collapse, setCollapse] = useState();
+    const optionsWithDisabled = [
+        { label: 'Permisos para editar equipo', value: 'Apple' },
+        { label: 'Permisos para ver viajes', value: 'Pear' },
+        { label: 'Permisos para editar', value: 'Orange', disabled: false },
+    ];
+    function handleOnChangeChecked(checkedValues){
+        console.log('checked = ', checkedValues);
+    }
+
     return(
-        <Row style={{backgroundColor: "white", width:"100%", height:"40px", fontSize:15, color:"#606060"}} align="middle">
-            <Col flex={4}>
-                <span style={{marginLeft:25, textAlign:"center"}}>{title}</span>
-            </Col>
-            <Col flex="auto">
-                <Checkbox onChange={(e)=> onChange(e, user.IdUser)}
-                        checked={canUserSeeDetailTravel}>Ver detalle de viaje</Checkbox>
-            </Col>
-            <Col flex={1}>
-                <Row align="middle" justify="space-around">
-                    <Tooltip title="Eliminar">
-                        <Popconfirm 
+        <div style={{flexDirection:"column", flex:1, justifyContent:"space-around"}}>
+             <Row 
+                style={{
+                    backgroundColor: "white", 
+                    width:"100%", 
+                    height:"40px", 
+                    fontSize:15, 
+                    color:"#606060"
+                }} 
+                align="middle">
+                <Button  
+                    icon={<PlusOutlined 
+                    style={{
+                        color:"gray", 
+                        fontSize:20
+                    }}
+                    onClick={()=> setCollapse(!collapse)}/>} />
+                <span style={{marginLeft:25, textAlign:"start", flex:"auto"}}>{title}</span>
+                <Tooltip title="Eliminar">
+                    <Popconfirm 
                         placement="top"
                         title="¿Seguro que quieres eliminarlo del equipo?"
                         okText="Sí"
                         onConfirm={() => onDeleteTeammate(user)}
                         cancelText="No"
                         >
-                            <Button shape="circle" icon={<DeleteOutlined style={{color:"#e74d3d"}}/>} />
-                        </Popconfirm>
-                    </Tooltip>
-                </Row>
-            </Col>            
-        </Row>
+                        <Button 
+                            shape="circle" 
+                            icon={<DeleteOutlined style={{color:"#e74d3d"}}/>} />
+                    </Popconfirm>
+                </Tooltip>           
+            </Row>
+            {collapse && 
+            <Checkbox.Group 
+                options={optionsWithDisabled}
+                onChange={handleOnChangeChecked}/>
+            }
+        </div>
     );
 }
 
