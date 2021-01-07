@@ -33,7 +33,7 @@ const Register = ({onChange, doLogIn}) => {
             }
             else{
                 message.success("Registro exitoso");
-                doLogIn({User:{IdUser: response.data}});
+                doLogIn({User: response.data});
                 history.push("/teams");
             }
         })

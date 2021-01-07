@@ -78,24 +78,31 @@ return  (
 
     <>
         { Modals[Modal] }
-        <Row align="middle" justify="end" style={{marginTop:10}}>
+        <Row 
+            align="middle" 
+            justify="end" 
+            style={{marginTop:10}}>
             <Tooltip title="Crear nuevo equipo">
-                <Button shape="circle" icon={<PlusCircleOutlined style={{color:"#3498db", fontSize:25}}
-                onClick={handleOnNewTeam}/>} />
+                <Button 
+                    shape="circle" 
+                    icon={<PlusCircleOutlined style={{color:"#3498db", fontSize:25}}
+                    onClick={handleOnNewTeam}/>} />
             </Tooltip>
         </Row>
         <List
-        itemLayout="horizontal"
-        loading = {isLoading}
-        dataSource={teams}
-        renderItem={item => (
-            <List.Item style={{paddingBottom:1}}>
-               <CardTeam title={item.TeamName} 
-               idTeam={item.IdTeam}
-               onEdit={handleOnEditTeam}
-               onExit={handleOnExitTeam}/>
-            </List.Item>
-            )}
+            itemLayout="horizontal"
+            loading = {isLoading}
+            dataSource={teams}
+            renderItem={item => (
+                <List.Item style={{paddingBottom:1}}>
+                    <CardTeam
+                        key={item.Id} 
+                        title={item.TeamName} 
+                        idTeam={item.IdTeam}
+                        onEdit={handleOnEditTeam}
+                        onExit={handleOnExitTeam}/>
+                </List.Item>
+                )}
         />
     </>
 );
