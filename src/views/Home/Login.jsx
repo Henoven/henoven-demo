@@ -27,7 +27,6 @@ const Login = ({onChange, doLogIn}) => {
             }
             else{
                 message.success("Inicio de sesión");
-                console.log(response.data);
                 doLogIn({User: response.data});
                 history.push("/teams");
             }

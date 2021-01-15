@@ -18,7 +18,7 @@ const EditTeamModal = ({ onClose, IdUser, IdTeam, refreshTeams}) =>{
 
     useEffect(() => {
         getTeamInfo();
-      },[IdUser, IdTeam]);
+    },[IdUser, IdTeam]);
 
     const getTeamInfo = () =>{
         if(!IdTeam) return;
@@ -185,13 +185,13 @@ const EditTeamModal = ({ onClose, IdUser, IdTeam, refreshTeams}) =>{
                     </Button>
                 </Popconfirm>,
                 <Button onClick={onClose}>
-                Cancelar
+                    Cancelar
                 </Button>,
                 <Button 
                     loading={Loading}
                     type="primary" 
                     onClick={() => handleChangeNameTeam()}>
-                Guardar
+                    Guardar
                 </Button>,
             ]}
         >
@@ -207,7 +207,7 @@ const EditTeamModal = ({ onClose, IdUser, IdTeam, refreshTeams}) =>{
                         marginTop:30, 
                         marginBottom:10, 
                         placeholderColor:"black"
-                    }}/>
+                }}/>
                 <Row  align="middle">
                     <Search
                         size="middle"

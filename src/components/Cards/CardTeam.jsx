@@ -5,7 +5,15 @@ import styles from "./cardTeam.module.css"
 
 const CardTeam = ({title, onEdit, onExit, idTeam,...rest}) =>{
     return(
-        <Row style={{backgroundColor: "white", width:"100%", height:"40px", borderRadius:10, fontSize:15, color:"#606060"}} align="middle">
+        <Row 
+            style={{
+                backgroundColor: "white", 
+                width:"95%",  
+                height:"40px", 
+                borderRadius:10, 
+                fontSize:15, 
+                color:"#606060"}} 
+            align="middle">
             <Col flex="auto">
                 <span style={{marginLeft:25, textAlign:"center"}}>{title}</span>
             </Col>
