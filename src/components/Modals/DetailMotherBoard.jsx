@@ -5,9 +5,30 @@ import ItemSensor from "../../components/ItemSensor";
 
 const { Title } = Typography;
 
-const DetailMotherBoard = ({ onClose }) =>{
+const DetailMotherBoard = ({ 
+    onClose,
+    motherBoard
+}) =>{
 
-    const [motherBoardName, setMotherBoardName] = useState("Nombre dispositivo");
+    const [motherBoardName, setMotherBoardName] = useState(motherBoard.Name);
+    const [isMotherBoardTurnedOn, setIsMotherBoardTurnedOn] = useState(motherBoard.Status.Value === "on" ? true : false);
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    const maxSampleTime=60;
+    const Status = {
+        on: "processing",
+        off: "default"
+    };
+
+    const OptionsSample = () =>{
+        let options = [];
+        for(let i=1; i<=maxSampleTime; i++){
+            options.push({
+                Label: i.toString() + (i <=1 ? " minuto" : " minutos"),
+                Value:i
+            });
+        }
+        return options;
+    };
 
     return(
         <Modal
@@ -36,12 +57,15 @@ const DetailMotherBoard = ({ onClose }) =>{
                             level={5}
                             style={{marginTop:20}}
                         >
-                            Prender/Apagar
+                            Apagar/Prender
                         </Title>
-                        <Switch />
+                        <Switch 
+                            checked={isMotherBoardTurnedOn}
+                            onClick={()=> setIsMotherBoardTurnedOn(!isMotherBoardTurnedOn)}
+                        />
                     </Col>
                     <Col>
-                        <Badge text="Status" status="processing"/>  
+                        <Badge text={motherBoard.Status.Label} status={Status[motherBoard.Status.Value]}/>  
                     </Col>
 
                 </Row>
@@ -67,16 +91,9 @@ const DetailMotherBoard = ({ onClose }) =>{
                             Tiempo de muestreo
                         </Title>
                         <Select placeholder="Selecciona tiempo de muestreo">
-                        </Select>
-                    </Col>
-                    <Col>
-                        <Title 
-                            level={5}
-                            style={{marginTop:20}}
-                        >
-                            Decimales en muestras
-                        </Title>
-                        <Select placeholder="Selecciona cantidad de decimales">
+                            {OptionsSample().map((option, index)=>
+                                <Select.Option key={index}>{option.Label}</Select.Option>
+                            )}
                         </Select>
                     </Col>
                 </Row>

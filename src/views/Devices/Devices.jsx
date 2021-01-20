@@ -13,6 +13,7 @@ const Devices = ({history, user}) =>{
 
     const [devices, setDevices] = useState([]);
     const [Modal, setModal] = useState(null);
+    const [motherBoardSelected, setMotherBoardSelected] = useState();
 
     const Modals = {
         "registerDevice": (
@@ -27,6 +28,7 @@ const Devices = ({history, user}) =>{
                 onOk={() => console.log("Ok")}
                 onClose={()=> setModal(null)}
                 userId={user.IdUser}
+                motherBoard={motherBoardSelected}
                 disabled={false}/>    
         )
         
@@ -54,6 +56,11 @@ const Devices = ({history, user}) =>{
         .catch((error) => {
           console.log("Error", error);
         })
+    };
+
+    const handleEditModal = (motherBoard) =>{
+        setModal("detailMotherBoard");
+        setMotherBoardSelected(motherBoard);
     };
     
     return(
@@ -87,7 +94,7 @@ const Devices = ({history, user}) =>{
                             name={item.Name}
                             teamName="Pedir a back que envíe nombre"
                             status={item.Status}
-                            onClick={() => setModal("detailMotherBoard")}/>
+                            onClick={() => handleEditModal(item)}/>
                     </List.Item>
                 )}
             />

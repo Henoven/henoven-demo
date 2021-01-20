@@ -19,7 +19,6 @@ const { Header, Content, Footer, Sider } = Layout;
 
 const MainPage = ({children}) =>{
     const menu = [
-        // {name: "inicio", route: "teams"},
         {name: "mis viajes", route: "travels", iconComponent:"global_outlined"},
         {name: "equipos", route: "teams", iconComponent:"team_outlined"},
         {name: "dispositivos", route: "devices", iconComponent:"mobile_outlined"},
@@ -64,20 +63,28 @@ const MainPage = ({children}) =>{
           onCollapse={(collapsed) => setCollapsed(collapsed)} 
           theme="light" 
           className={styles.sider}>
-          {!Collapsed ? <Image src="http://henovenalfa.000webhostapp.com/resources/logo_henoven.png" preview={false} className={styles.logo}/> 
-              :  <Image src="http://henovenalfa.000webhostapp.com/resources/logo.png" preview={false} className={styles.logo}/> 
+          {!Collapsed ? 
+            <Image 
+              src="http://henovenalfa.000webhostapp.com/resources/logo_henoven.png" 
+              preview={false} 
+              className={styles.logo}/> 
+            :  
+            <Image 
+              src="http://henovenalfa.000webhostapp.com/resources/logo.png" 
+              preview={false} 
+              className={styles.logo}/> 
           }
           <Menu theme="light" defaultSelectedKeys={['1']} mode="inline">
             {menu.map((menuItem, index)=> 
-            <>
-              <Menu.Item 
-                key={index} 
-                icon ={getIconComponent(menuItem.iconComponent)} 
-                onClick={()=> handleOnNavigate(menuItem.route)}>
-                  {capitalizeFirstLetter(menuItem.name)}
-              </Menu.Item>
-              <Menu.Divider />
-            </>  
+              <>
+                <Menu.Item 
+                  key={index} 
+                  icon ={getIconComponent(menuItem.iconComponent)} 
+                  onClick={()=> handleOnNavigate(menuItem.route)}>
+                    {capitalizeFirstLetter(menuItem.name)}
+                </Menu.Item>
+                <Menu.Divider />
+              </>  
             )}
           </Menu>
           <Menu >
