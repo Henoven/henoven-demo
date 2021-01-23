@@ -14,6 +14,7 @@ const Devices = ({history, user}) =>{
     const [devices, setDevices] = useState([]);
     const [Modal, setModal] = useState(null);
     const [motherBoardSelected, setMotherBoardSelected] = useState();
+    const [loading, setLoading] = useState(false);
 
     const Modals = {
         "registerDevice": (
@@ -39,6 +40,7 @@ const Devices = ({history, user}) =>{
     }, []);
 
     const handleLoadDevices = () =>{
+        setLoading(true);
         const params = new URLSearchParams();
         params.append("func", functions.getUserMBs);
         params.append("IdUserIS", user.IdUser);
@@ -56,6 +58,7 @@ const Devices = ({history, user}) =>{
         .catch((error) => {
           console.log("Error", error);
         })
+        setLoading(false);
     };
 
     const handleEditModal = (motherBoard) =>{
@@ -86,13 +89,14 @@ const Devices = ({history, user}) =>{
             <List
                 itemLayout="horizontal"
                 dataSource={devices.UserMotherBoards}
+                loading={loading}
                 renderItem={item => (
                     <List.Item style={{paddingBottom:1}}>
                         <CardDevice
                             key={item.IdSN} 
-                            code="No hay número de serie"
+                            code={item.SerialNumber}
                             name={item.Name}
-                            teamName="Pedir a back que envíe nombre"
+                            teamName={item.TeamName}
                             status={item.Status}
                             onClick={() => handleEditModal(item)}/>
                     </List.Item>
