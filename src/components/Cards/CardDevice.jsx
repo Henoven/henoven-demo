@@ -1,6 +1,7 @@
-import React from 'react';
-import {Col, Row, Button, Badge, Switch } from "antd";
+import React, { useState } from 'react';
+import {Col, Row, Button, Badge, Switch, message } from "antd";
 import { EditOutlined} from '@ant-design/icons';
+import axios from "../../axios";
 
 const Statuses = {
     on: "processing",
@@ -12,8 +13,17 @@ const CardDevice = ({
     name, 
     status, 
     teamName, 
-    onClick
+    onClick,
+    onTurnOnOff,
+    IdMotherBoard
 }) =>{
+
+    const [isMotherBoardTurnedOn, setIsMotherBoardTurnedOn] = useState(status.Value === "on" ? true : false);
+
+    const handleTurnOnOffMotherboard = (isTurnOn) =>{
+        onTurnOnOff(isTurnOn, IdMotherBoard);
+        setIsMotherBoardTurnedOn(!isTurnOn);
+    }
 
     return(
         <>
@@ -49,7 +59,10 @@ const CardDevice = ({
                                 shape="circle" 
                                 icon={<EditOutlined style={{color:"#3498db"}}/>}
                                 onClick={onClick} />
-                            <Switch/>
+                            <Switch
+                                checked={isMotherBoardTurnedOn}
+                                onClick={() => handleTurnOnOffMotherboard(isMotherBoardTurnedOn)}
+                            />
                         </Row>
                     </Col>
             </Row>

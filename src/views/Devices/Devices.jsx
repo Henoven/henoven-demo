@@ -30,14 +30,16 @@ const Devices = ({history, user}) =>{
                 onClose={()=> setModal(null)}
                 userId={user.IdUser}
                 motherBoard={motherBoardSelected}
-                disabled={false}/>    
+                disabled={false}
+                setUserMotherBoards={setDevices}
+            />    
         )
         
     };
 
     useEffect(() => {
         handleLoadDevices();
-    }, []);
+    }, [Modal]);
 
     const handleLoadDevices = () =>{
         setLoading(true);
@@ -59,6 +61,28 @@ const Devices = ({history, user}) =>{
           console.log("Error", error);
         })
         setLoading(false);
+    };
+
+    const handleTurnOnOffMotherboard = (isTurnOn, IdMotherBoard) =>{
+        const params = new URLSearchParams();
+        params.append("func", isTurnOn ? "MB-tmbof" : "MB-tmbo");
+        params.append("args", JSON.stringify({ IdMotherBoard }));
+        params.append("IdUserIS", user.IdUser);
+        axios.post("", params)
+        .then((response) => {
+            let validate = JSON.stringify(response);
+            if (validate.includes("User|Error")) {
+                const messageToShow = response.data.Echo.split(":")[1];
+                message.error(messageToShow);
+                return;
+            }
+            else{
+                handleLoadDevices();
+            }
+        })
+        .catch((error) => {
+          console.log("Error", error);
+        })
     };
 
     const handleEditModal = (motherBoard) =>{
@@ -94,11 +118,14 @@ const Devices = ({history, user}) =>{
                     <List.Item style={{paddingBottom:1}}>
                         <CardDevice
                             key={item.IdSN} 
+                            IdMotherBoard={item.IdMotherBoard}
                             code={item.SerialNumber}
                             name={item.Name}
                             teamName={item.TeamName}
                             status={item.Status}
-                            onClick={() => handleEditModal(item)}/>
+                            onClick={() => handleEditModal(item)}
+                            onTurnOnOff={handleTurnOnOffMotherboard}
+                        />
                     </List.Item>
                 )}
             />
