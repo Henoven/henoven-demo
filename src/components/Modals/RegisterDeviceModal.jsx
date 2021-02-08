@@ -8,7 +8,7 @@ const { Title } = Typography;
 const RegisterDeviceModal = ({ 
     onClose, 
     userId, 
-    refreshTeams
+    loadDevices
 }) =>{
     
     const [Loading, setLoading] = useState(false);
@@ -72,8 +72,8 @@ const RegisterDeviceModal = ({
                 return;
             }
             setLoading(false);
-            refreshTeams(true);
             setSerialNumber("");
+            loadDevices();
             onClose(); 
         })
         .catch((error) => {

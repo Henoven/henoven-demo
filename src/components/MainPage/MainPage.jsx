@@ -74,7 +74,7 @@ const MainPage = ({children}) =>{
               preview={false} 
               className={styles.logo}/> 
           }
-          <Menu theme="light" defaultSelectedKeys={['1']} mode="inline">
+          <Menu theme="light" mode="inline">
             {menu.map((menuItem, index)=> 
               <>
                 <Menu.Item 

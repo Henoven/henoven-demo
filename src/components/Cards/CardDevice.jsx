@@ -15,13 +15,14 @@ const CardDevice = ({
     teamName, 
     onClick,
     onTurnOnOff,
-    IdMotherBoard
+    IdMotherBoard,
+    data,
 }) =>{
-
-    const [isMotherBoardTurnedOn, setIsMotherBoardTurnedOn] = useState(status.Value === "on" ? true : false);
+console.log("data", data);
+    const [isMotherBoardTurnedOn, setIsMotherBoardTurnedOn] = useState();
 
     useEffect(() => {
-        setIsMotherBoardTurnedOn(status.Value === "on" ? true : false);
+        setIsMotherBoardTurnedOn(status ? (status.Value === "on" ? true : false): false);
     }, [status]);
 
     const handleTurnOnOffMotherboard = (isTurnOn) =>{
@@ -55,7 +56,7 @@ const CardDevice = ({
                         <span>{teamName}</span>
                     </Col>
                     <Col span={4}>
-                        <Badge status={Statuses[status.Value]} text={status.Label}/>
+                        <Badge status={Statuses[status ? status.Value : "off"]} text={status ? status.Label : "Apagado"}/>
                     </Col>
                     <Col span={4}>
                         <Row justify="end" align="middle">

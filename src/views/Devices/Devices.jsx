@@ -22,7 +22,8 @@ const Devices = ({history, user}) =>{
                 onOk={() => console.log("Ok")}
                 onClose={()=> setModal(null)}
                 userId={user.IdUser}
-                disabled={false}/>
+                disabled={false}
+                loadDevices={()=> handleLoadDevices()}/>
         ),
         "detailMotherBoard": (
             <DetailMotherBoard
@@ -118,6 +119,7 @@ const Devices = ({history, user}) =>{
                     <List.Item style={{paddingBottom:1}}>
                         <CardDevice
                             key={item.IdSN} 
+                            data={item}
                             IdMotherBoard={item.IdMotherBoard}
                             code={item.SerialNumber}
                             name={item.Name}
