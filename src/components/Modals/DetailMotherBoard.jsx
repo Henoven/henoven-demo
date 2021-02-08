@@ -107,7 +107,8 @@ const DetailMotherBoard = ({
         if(senseFrequency){
             updateMotherBoardConfigurations();
         }
-        onClose();
+        //If you want to close the modal when saving details.
+        //onClose(); 
     };
 
     const handleTurnOnOffMotherboard = (isTurnOn) =>{

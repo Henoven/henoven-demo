@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {Col, Row, Button, Badge, Switch, message } from "antd";
 import { EditOutlined} from '@ant-design/icons';
 import axios from "../../axios";
@@ -20,6 +20,10 @@ const CardDevice = ({
 
     const [isMotherBoardTurnedOn, setIsMotherBoardTurnedOn] = useState(status.Value === "on" ? true : false);
 
+    useEffect(() => {
+        setIsMotherBoardTurnedOn(status.Value === "on" ? true : false);
+    }, [status]);
+
     const handleTurnOnOffMotherboard = (isTurnOn) =>{
         onTurnOnOff(isTurnOn, IdMotherBoard);
         setIsMotherBoardTurnedOn(!isTurnOn);
@@ -33,8 +37,9 @@ const CardDevice = ({
                     width:"95%", 
                     height:"40px", 
                     borderRadius:10,
-                    borderWidth:3, 
-                    borderColor:"black",
+                    borderWidth:1, 
+                    borderColor:"#a0a0a0",
+                    borderStyle:"solid",
                     fontSize:15, 
                     color:"#606060"
                 }}

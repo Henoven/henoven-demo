@@ -6,8 +6,8 @@ import App from "./App"
 import TeamsContainer from "./containers/TeamsContainer";
 import HomeContainer from './containers/HomeContainer';
 import Settings from './views/Settings/Settings';
-import Travels from "./views/Travels/Travels";
 import DeviceContainer from './containers/DeviceContainer';
+import TravelContainer from './containers/TravelContainer';
 
 const AppRoutes = () => {
 
@@ -20,7 +20,7 @@ const AppRoutes = () => {
             <App>
                 <Switch>
                     <Route exact path="/teams" component={TeamsContainer} />
-                    <Route exact path="/travels" component={Travels} />
+                    <Route exact path="/travels" component={TravelContainer} />
                     <Route exact path="/devices" component={DeviceContainer} />
                     <Route exact path="/settings" component={Settings} />
                     {/* <Route path="/pendientes" component={ToDoContainer} />

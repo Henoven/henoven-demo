@@ -11,6 +11,9 @@ const CardTeam = ({title, onEdit, onExit, idTeam,...rest}) =>{
                 width:"95%",  
                 height:"40px", 
                 borderRadius:10, 
+                borderStyle:"solid",
+                borderWidth:1,
+                borderColor:"#a0a0a0",
                 fontSize:15, 
                 color:"#606060"}} 
             align="middle">
