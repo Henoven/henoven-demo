@@ -66,7 +66,7 @@ const TravelsPage =({histoy, user})=> {
     }
     return(
         <div style={{marginTop: 20}}>
-            <Row >
+            {/* <Row >
                 <Button  
                     size="large" 
                     onClick={()=> setViewSelected("currentTravels")}>
@@ -77,8 +77,8 @@ const TravelsPage =({histoy, user})=> {
                     onClick={()=> setViewSelected("finishedTravels")}>
                         Viajes terminados
                 </Button>
-            </Row>
-            <Divider style={{marginTop:5}}/>
+            </Row> */}
+            {/* <Divider style={{marginTop:5}}/> */}
             <Switch>
                 <Route path="/travels" render={() => renderOption()} />
             </Switch>

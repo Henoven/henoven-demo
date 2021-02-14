@@ -1,7 +1,6 @@
 import React from 'react';
 import {Row, Col, Button, Tooltip, Popconfirm} from "antd";
 import { EditOutlined, LogoutOutlined } from '@ant-design/icons';
-import styles from "./cardTeam.module.css"
 
 const CardTeam = ({title, onEdit, onExit, idTeam,...rest}) =>{
     return(

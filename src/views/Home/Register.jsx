@@ -1,6 +1,6 @@
 import React from 'react';
 import styles from "./home.module.css"
-import { Form, Input, Button, Image, message } from 'antd';
+import { Form, Input, Button, Image, message, Row } from 'antd';
 import { sha256 } from "js-sha256";
 import axios from '../../axios';
 import { useHistory } from 'react-router-dom';
@@ -108,27 +108,35 @@ const Register = ({onChange, doLogIn}) => {
                             prefix={<LockOutlined className="site-form-item-icon" />}/>
                         </Form.Item>
                         <Form.Item
-                        name="password2"
-                        rules={[
-                            {
-                            required: true,
-                            message: 'Falta confirmar tu contraseña',
-                            },
-                        ]}
+                            name="password2"
+                            rules={[
+                                {
+                                required: true,
+                                message: 'Falta confirmar tu contraseña',
+                                },
+                            ]}
                         >
-                            <Input.Password placeholder="Confirmar contraseña"
-                            prefix={<LockOutlined className="site-form-item-icon" />}/>
-                        </Form.Item>
-                        <Form.Item>
-                            <Button type="default" htmlType="button" onClick={()=> onChange("login")}>
-                                Iniciar sesión
-                            </Button>
+                            <Input.Password 
+                                placeholder="Confirmar contraseña"
+                                prefix={<LockOutlined className="site-form-item-icon" />
+                                }
+                            />
                         </Form.Item>
                         <Form.Item  name="remember" valuePropName="checked">
-                        <Button type="primary" htmlType="submit">
+                        <Button 
+                            type="primary" 
+                            htmlType="submit"
+                            style={{width:"100%"}}
+                        >
                                 Registrarse
                             </Button>
                         </Form.Item>
+                        <Row justify="center" align="middle">
+                            <div>¿Ya tienes cuenta?</div>
+                            <Button type="link" htmlType="button" onClick={()=> onChange("login")}>
+                                    Iniciar sesión
+                            </Button>
+                        </Row>
                     </Form>
                 </div>
             </div>

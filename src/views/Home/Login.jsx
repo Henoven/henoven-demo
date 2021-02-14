@@ -1,10 +1,11 @@
 import React from 'react';
 import styles from "./home.module.css"
-import { Form, Input, Button, Image, message, } from 'antd';
+import { Form, Input, Button, Image, message, Row, } from 'antd';
 import { sha256 } from "js-sha256";
 import axios from "../../axios";
 import { useHistory } from 'react-router-dom';
 import { MailOutlined, LockOutlined } from '@ant-design/icons';
+import Title from 'antd/lib/typography/Title';
 
 const Login = ({onChange, doLogIn}) => {
 
@@ -76,16 +77,20 @@ const Login = ({onChange, doLogIn}) => {
                             <Input.Password placeholder="Contraseña"
                                             prefix={<LockOutlined className="site-form-item-icon" />}/>
                         </Form.Item>
-                        <Form.Item  name="remember" valuePropName="checked">
-                            <Button type="default" htmlType="button" onClick={()=> onChange("register")}>
-                                Registrarse
-                            </Button>
-                        </Form.Item>
                         <Form.Item>
-                            <Button type="primary" htmlType="submit">
+                            <Button 
+                                type="primary" 
+                                htmlType="submit"
+                                style={{width:"100%"}}>
                                 Iniciar sesión
                             </Button>
                         </Form.Item>
+                        <Row justify="center" align="middle">
+                            <div>¿No tienes cuenta?</div>
+                            <Button type="link" htmlType="button" onClick={()=> onChange("register")}>
+                                    Registrarse
+                            </Button>
+                        </Row>
                     </Form>
                 </div>
             </div>

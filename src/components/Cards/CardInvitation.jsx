@@ -1,7 +1,6 @@
 import React from 'react';
 import {Row, Col, Button, Tooltip, Popconfirm, Badge} from "antd";
 import { CloseCircleOutlined, CheckCircleOutlined } from '@ant-design/icons';
-import styles from "./cardTeam.module.css"
 
 const CardInvitation = ({title, onConfirm, onReject, idTeam, status, userWhoSendInvitationName}) =>{
     return(

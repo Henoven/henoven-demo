@@ -4,9 +4,6 @@ import {
   Input, 
   Typography, 
   Row, 
-  Col, 
-  Select, 
-  DatePicker, 
   Button, 
   Tag,
   Tooltip,
@@ -15,12 +12,6 @@ import {
 import { withRouter } from 'react-router-dom';
 import { 
   EditOutlined, 
-  CheckCircleOutlined,
-  SyncOutlined,
-  CloseCircleOutlined,
-  ExclamationCircleOutlined,
-  ClockCircleOutlined,
-  MinusCircleOutlined,
   PlusCircleOutlined
 } from '@ant-design/icons';
 
@@ -28,9 +19,6 @@ import axios from "../../../axios";
 
 import NewTeamModal from "../../../components/Modals/NewTravel";
 import TravelDetail from '../../../components/Modals/TravelDetail';
-
-const {Search} = Input;
-const {Title}=Typography;
 
 const Statuses = {
   STARTED: "started",
@@ -106,7 +94,10 @@ const CurrentTravels = ({user}) =>{
 
   const Modals = {
     "newTravelModal": <NewTeamModal 
-                        onClose={()=>setModal(null)}/>,
+                        onClose={()=>setModal(null)}
+                        userId={user.IdUser}  
+                        setTravels={setTravels}
+                      />,
     "travelDetail": <TravelDetail 
                         onClose={()=>setModal(null)}/>
   };
@@ -127,7 +118,7 @@ const CurrentTravels = ({user}) =>{
             message.error(messageToShow[1]);
         }
         else{
-          const { Travels } = response.data[0];
+          const { Travels } = response.data;
           setTravels(Travels)
         }
     })
@@ -136,6 +127,7 @@ const CurrentTravels = ({user}) =>{
     })
   };
 
+  console.log(Data);
   return  (
     <>
       { Modals[Modal] }
@@ -143,15 +135,15 @@ const CurrentTravels = ({user}) =>{
             align="middle" 
             justify="end" 
             style={{marginTop:10, marginBottom:10}}>
-            <Tooltip title="Crear nuevo equipo">
+            <Tooltip title="Comenzar un nuevo viaje">
                 <Button 
                     shape="circle" 
                     icon={<PlusCircleOutlined style={{color:"#3498db", fontSize:25}}/>}
                     onClick={()=> setModal("newTravelModal")} />
             </Tooltip>
       </Row>
-      <Search style={{marginBottom:20}}/>
-      <Title level={5}>Filtrar por</Title>
+      {/* <Search style={{marginBottom:20}}/> */}
+      {/* <Title level={5}>Filtrar por</Title>
       <Row 
         gutter={{ xs: 8, sm: 16, md: 24, lg: 32 }} 
         align="middle" 
@@ -168,11 +160,11 @@ const CurrentTravels = ({user}) =>{
           <Col >
               <DatePicker placeholder="Fecha de inicio"/>
           </Col>
-      </Row>
+      </Row> */}
       <Table 
         dataSource={Data} 
         columns={columns} 
-        scroll={{ x: 800, y: 280 }} />
+        scroll={{ x: 800, y: 350 }} />
     </>
 );
 }

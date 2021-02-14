@@ -40,7 +40,7 @@ const Devices = ({history, user}) =>{
 
     useEffect(() => {
         handleLoadDevices();
-    }, [Modal]);
+    }, [,Modal]);
 
     const handleLoadDevices = () =>{
         setLoading(true);
