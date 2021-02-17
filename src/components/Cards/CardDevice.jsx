@@ -18,7 +18,6 @@ const CardDevice = ({
     IdMotherBoard,
     data,
 }) =>{
-console.log("data", data);
     const [isMotherBoardTurnedOn, setIsMotherBoardTurnedOn] = useState();
 
     useEffect(() => {

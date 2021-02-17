@@ -6,7 +6,7 @@ const CardTeam = ({title, onEdit, onExit, idTeam,...rest}) =>{
     return(
         <Row 
             style={{
-                backgroundColor: "white", 
+                backgroundColor:"white",
                 width:"95%",  
                 height:"40px", 
                 borderRadius:10, 

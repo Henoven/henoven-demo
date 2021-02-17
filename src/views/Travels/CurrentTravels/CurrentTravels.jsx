@@ -44,6 +44,7 @@ const StatusColor = {
 const CurrentTravels = ({user}) =>{
   const [Modal, setModal] = useState(null);
   const [travels, setTravels] = useState([]);
+  const [travelSelected, setTravelSelected] = useState(null);
 
   const Data = (() => travels.map((d, key) => ({ ...d, key })))();
 
@@ -87,7 +88,7 @@ const CurrentTravels = ({user}) =>{
           style={{marginRight:10}}
           shape="circle" 
           icon={<EditOutlined style={{color:"#3498db"}}/>}
-          onClick={()=> setModal("travelDetail")} />
+          onClick={()=> handleOpenTravelDetail(record)} />
       ),
     },
   ];
@@ -99,12 +100,21 @@ const CurrentTravels = ({user}) =>{
                         setTravels={setTravels}
                       />,
     "travelDetail": <TravelDetail 
-                        onClose={()=>setModal(null)}/>
+                        onClose={()=>setModal(null)}
+                        userId={user.IdUser}  
+                        travel={travelSelected}
+                        setTravels={setTravels}
+                    />
   };
 
   useEffect(() => {
     getTravels();
   }, []);
+
+  const handleOpenTravelDetail = (travel) =>{
+    setModal("travelDetail");
+    setTravelSelected(travel)
+  };
 
   const getTravels = () =>{
     const params = new URLSearchParams();
@@ -127,7 +137,6 @@ const CurrentTravels = ({user}) =>{
     })
   };
 
-  console.log(Data);
   return  (
     <>
       { Modals[Modal] }
@@ -164,7 +173,8 @@ const CurrentTravels = ({user}) =>{
       <Table 
         dataSource={Data} 
         columns={columns} 
-        scroll={{ x: 800, y: 350 }} />
+        scroll={{ x: 800, y: 400 }}
+      />
     </>
 );
 }

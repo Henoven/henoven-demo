@@ -174,6 +174,7 @@ const EditTeamModal = ({ onClose, IdUser, IdTeam, refreshTeams}) =>{
             onCancel={onClose}
             footer={[
                 <Popconfirm 
+                    key={0}
                     placement="topLeft"
                     title="¿Seguro que quieres eliminar el equipo?"
                     okText="Sí"
@@ -184,10 +185,11 @@ const EditTeamModal = ({ onClose, IdUser, IdTeam, refreshTeams}) =>{
                         Eliminar equipo
                     </Button>
                 </Popconfirm>,
-                <Button onClick={onClose}>
+                <Button key={1} onClick={onClose}>
                     Cancelar
                 </Button>,
                 <Button 
+                    key={2}
                     loading={Loading}
                     type="primary" 
                     onClick={() => handleChangeNameTeam()}>
