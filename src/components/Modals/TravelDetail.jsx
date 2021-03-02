@@ -1,7 +1,9 @@
 import React, {useState, useEffect} from 'react';
-import { Modal, Button, message, Select, Typography, Col, Row, Popconfirm} from "antd";
-import { LineChart, Line, XAxis, YAxis, ReferenceLine } from "recharts";
+import { Modal, Button, message, Select, Typography, Col, Row, Popconfirm, Tooltip} from "antd";
 import axios from "../../axios";
+import AppChar from '../AppChar';
+import { IconButton } from '@material-ui/core';
+import { CompassOutlined} from '@ant-design/icons';
 
 const { Option } = Select;
 const { Title } = Typography;
@@ -23,26 +25,25 @@ const TravelDetail = ({
         textAlign: "center"
     };
     
-    const data = [];
-    const launchDate = 2004;
+    // const data = [];
+    // const launchDate = 2004;
 
-    const rand = 300;
-    for (let i = 0; i < 7; i++) {
-    const year = 2000 + i;
-    const value = Math.random() * (rand + 50) + 100;
-    let d = {
-        year: year,
-        value: value,
-        beforeLaunch: year <= launchDate ? value : undefined
-    };
+    // const rand = 300;
+    // for (let i = 0; i < 7; i++) {
+    // const year = 2000 + i;
+    // const value = Math.random() * (rand + 50) + 100;
+    // let d = {
+    //     year: year,
+    //     value: value,
+    //     beforeLaunch: year <= launchDate ? value : undefined
+    // };
 
-    data.push(d);
-    }
-    console.log(data);
+    // data.push(d);
+    // }
 
-    // change type to see that the overlap might not be appropriate towards the
-    // end of the shorter chart
-    const type = "monotone";
+    // // change type to see that the overlap might not be appropriate towards the
+    // // end of the shorter chart
+    // const type = "monotone";
 
     const getTravelDetail = () =>{
         if(!travel){return;}
@@ -62,7 +63,6 @@ const TravelDetail = ({
             }
             else{
                 setTravelDetail(response.data);
-                console.log(response.data);
             }
         })
         .catch((error) => {
@@ -94,6 +94,10 @@ const TravelDetail = ({
         .catch((error) => {
         console.log("Error", error);
         })
+    };
+
+    const handleOpenMap = () =>{
+        window.open(`http://www.google.com/maps/place/20.774444763426768, -103.37235404186643/@20.774444763426768, -103.37235404186643,17z`);
     };
 
     return(
@@ -154,22 +158,31 @@ const TravelDetail = ({
                             textAlign:"center",
                             padding:5,
                             marginBottom:10
-                        }}>03/10/2020 15:00:05
+                        }}>
+                            {travelDetail.LastMeasurement.Time}
                         </div>
                         <Title level={5} style={{color:"#3498db"}}>
                             Ubicación
                         </Title>
-                        <div style={{
+                        <Row style={{
                             borderRadius:10,
                             borderWidth:1,
                             borderColor:"#a0a0a0",
                             borderStyle:"solid",
                             textAlign:"center",
                             padding:5,
-                            marginBottom:10
-                        }}>
-                            México 200, Nogales Sonora
-                        </div>
+                            marginBottom:10,
+                        }}
+                            justify="space-between"
+                            align="middle"
+                        >
+                            <span style={{flex:1}}>México 200, Nogales Sonora</span>
+                            <Tooltip title="Abrir en Google Maps">
+                                <IconButton onClick={()=> handleOpenMap()}>
+                                    <CompassOutlined />
+                                </IconButton>
+                            </Tooltip>
+                        </Row>
                         <div style={{
                             borderRadius:10,
                             borderWidth:1,
@@ -228,14 +241,19 @@ const TravelDetail = ({
                         </Row>
                     </Col>
                     <Col flex={1}>
-                        <div style={
+                        <div style={styles}>
+                            <AppChar/>
+                        </div>
+                        <Title 
+                            level={5}
+                        style={
                             {
                                 textAlign:"end"
                             }
                         }>
                             Módulo: 265461Sda54d
-                        </div>
-                        <div style={styles}>
+                        </Title>
+                        {/* <div style={styles}>
                             <LineChart
                             width={500}
                             height={300}
@@ -248,7 +266,7 @@ const TravelDetail = ({
                             <YAxis />
                             <ReferenceLine x={launchDate} label="Temperatura" />
                             </LineChart>
-                        </div>
+                        </div> */}
                     </Col>
                 </Row>
             }
