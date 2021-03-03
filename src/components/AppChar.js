@@ -1,24 +1,34 @@
 import React, { useState } from 'react';
 import Chart from "react-apexcharts";
+import TravelDetail from './Modals/TravelDetail';
 
-const AppChar = () =>{
+const AppChar = ({
+  travelData
+}) =>{
+
+    const[sensor1, setSensor1] = useState(travelData.Temperature.Sensor1);
+    const[sensor2, setSensor2] = useState(travelData.Temperature.Sensor2);
+    const[sensor3, setSensor3] = useState(travelData.Temperature.Sensor3);
+    const[time, setTime] = useState(travelData.Time);
+    const[humidity, setHumidity] = useState(travelData.Humidity);
+
     const [options, setOptions]= useState({
         chart: {
             height: 350,
             type: 'line',
           },
           stroke: {
-            width: [10, 1],
+            width: [8, 8, 8, 1],
             curve: 'smooth'
           },
-          colors:["#2173de", "#b3deff"],
+          colors:["#2173de","#2173de", "#2173de", "#b3deff"],
           xaxis: {
             type: 'datetime',
-            categories: ['1/11/2000', '2/11/2000', '3/11/2000', '4/11/2000', '5/11/2000', '6/11/2000', '7/11/2000', '8/11/2000', '9/11/2000', '10/11/2000', '11/11/2000', '12/11/2000', '1/11/2001', '2/11/2001', '3/11/2001','4/11/2001' ,'5/11/2001' ,'6/11/2001',],
+            categories: time.Data,
             tickAmount: 10,
             labels: {
               formatter: function(value, timestamp, opts) {
-                return opts.dateFormatter(new Date(timestamp), 'dd MMM')
+                return opts.dateFormatter(new Date(timestamp), 'dd/MMM hh:mm')
               }
             }
           },
@@ -34,26 +44,27 @@ const AppChar = () =>{
             type: 'gradient',
             gradient: {
               shade: 'dark',
-              gradientToColors: [ '#FDD835', '#82a8ff'],
+              gradientToColors: [ '#FDD835', '#FDD835', '#FDD835', '#82a8ff'],
               shadeIntensity: 1,
               type: 'vertical',
-              opacityFrom: 5,
-              opacityTo: 5,
-              stops: [0, 100, 100, 100]
+              opacityFrom: 1,
+              opacityTo: 1,
+              stops: [0, 500, 500, 500]
             },
           },
           markers: {
-            size: 4,
-            colors: ["#FFA41B"],
-            strokeColors: "#fff",
+            size: 1,
+            colors: ["#FDD835", "#FDD835", "#FDD835", "#000000"],
+            strokeColors: "#FDD835",
             strokeWidth: 2,
             hover: {
-              size: 7,
+              size: 1,
             }
           },
           yaxis: [{
-            min: -10,
-            max: 40,
+            // min: -10,
+            // max: 40,
+            decimalsInFloat:2,
             title: {
               text: 'Temperatura',
             },
@@ -62,6 +73,7 @@ const AppChar = () =>{
             opposite: true,
             min: 0,
             max: 100,
+            decimalsInFloat:0,
             axisTicks: {
               show: true
             },
@@ -80,14 +92,24 @@ const AppChar = () =>{
         ]});
     const [series, setSeries] = useState([
         {
-            name: 'Temperatura',
+            name: sensor1.Label,
             type:"line",
-            data: [4, 3, 10, 9, 29, 19, 22, 9, 12, 7, 19, 5, 13, 9, 17, 2, 7, 5]
+            data: sensor1.Data
         },
         {
-            name: "Humedad",
-            type:"column",
-            data: [20, 29, 37, 36, 44, 45, 50, 58, 40,38,34,36,25]
+            name: sensor2.Label,
+            type:"line",
+            data: sensor2.Data
+        },
+        {
+            name: sensor3.Label,
+            type:"line",
+            data: sensor3.Data
+        },
+        {
+            name: humidity.Label,
+            type:"area",
+            data: humidity.Data
         }
     ]);
 

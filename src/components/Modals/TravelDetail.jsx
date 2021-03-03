@@ -15,6 +15,7 @@ const TravelDetail = ({
     setTravels
 }) =>{
     const [travelDetail, setTravelDetail] = useState(null);
+    const [travelData, setTravelData] = useState(null);
 
     useEffect(() => {
         getTravelDetail();
@@ -62,7 +63,10 @@ const TravelDetail = ({
                 message.error(messageToShow[1]);
             }
             else{
+                const { TravelData } = response.data;
                 setTravelDetail(response.data);
+                setTravelData(TravelData);
+                console.log(response.data);
             }
         })
         .catch((error) => {
@@ -176,24 +180,13 @@ const TravelDetail = ({
                             justify="space-between"
                             align="middle"
                         >
-                            <span style={{flex:1}}>México 200, Nogales Sonora</span>
+                            <span style={{flex:1}}>Bosues de la Cascada, 280, Zapopan, Jalisco</span>
                             <Tooltip title="Abrir en Google Maps">
                                 <IconButton onClick={()=> handleOpenMap()}>
                                     <CompassOutlined />
                                 </IconButton>
                             </Tooltip>
                         </Row>
-                        <div style={{
-                            borderRadius:10,
-                            borderWidth:1,
-                            borderColor:"#a0a0a0",
-                            borderStyle:"solid",
-                            textAlign:"center",
-                            padding:5,
-                            marginBottom:10,
-                        }}>
-                            21.135220, -150.166267
-                        </div>
                         <Title level={5} style={{color:"#3498db"}}>
                             Última medición
                         </Title>
@@ -221,8 +214,8 @@ const TravelDetail = ({
                                 borderRightColor:"#a0a0a0",
                             }}>
                                 <div>Sensor 1</div>
-                                <div>{ travelDetail.LastMeasurement.Sensor1 + "°C"}</div>
-                                <div>{ travelDetail.LastMeasurement.Humidity + "%"}</div>
+                                <div>{ travelDetail.LastMeasurement.Sensor1Temp + "°C"}</div>
+                                <div>{ travelDetail.LastMeasurement.Sensor1Hum + "%"}</div>
                             </Col>
                             <Col flex={1} style={{
                                 borderRightStyle:"solid",
@@ -230,20 +223,24 @@ const TravelDetail = ({
                                 borderRightColor:"#a0a0a0",
                             }}>
                                 <div>Sensor 2</div>
-                                <div>{ travelDetail.LastMeasurement.Sensor2 + "°C"}</div>
-                                <div>{ travelDetail.LastMeasurement.Humidity + "%"}</div>
+                                <div>{ travelDetail.LastMeasurement.Sensor2Temp + "°C"}</div>
+                                <div>{ travelDetail.LastMeasurement.Sensor2Hum + "%"}</div>
                             </Col>
                             <Col flex={1} >
                                 <div>Sensor 3</div>
-                                <div>{ travelDetail.LastMeasurement.Sensor3  + "°C"}</div>
-                                <div>{ travelDetail.LastMeasurement.Humidity + "%"}</div>
+                                <div>{ travelDetail.LastMeasurement.Sensor3Temp + "°C"}</div>
+                                <div>{ travelDetail.LastMeasurement.Sensor3Hum + "%"}</div>
                             </Col>
                         </Row>
                     </Col>
                     <Col flex={1}>
-                        <div style={styles}>
-                            <AppChar/>
-                        </div>
+                        {travelData &&
+                            <div style={styles}>
+                                    <AppChar
+                                        travelData={travelData}
+                                    />
+                            </div>
+                        }
                         <Title 
                             level={5}
                         style={
@@ -253,20 +250,6 @@ const TravelDetail = ({
                         }>
                             Módulo: 265461Sda54d
                         </Title>
-                        {/* <div style={styles}>
-                            <LineChart
-                            width={500}
-                            height={300}
-                            data={data}
-                            margin={{ top: 5, right: 20, bottom: 5, left: 0 }}
-                            >
-                            <Line type={type} dataKey="value" stroke="#8884d8" dot={false} />
-                            <Line type={type} dataKey="beforeLaunch" stroke="red" dot={false} />
-                            <XAxis dataKey="year" />
-                            <YAxis />
-                            <ReferenceLine x={launchDate} label="Temperatura" />
-                            </LineChart>
-                        </div> */}
                     </Col>
                 </Row>
             }
