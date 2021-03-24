@@ -9,6 +9,7 @@ import {
     SettingOutlined,
     ImportOutlined,
     UserOutlined,
+    ShopOutlined
   } from '@ant-design/icons';
 
 import { doLogOut } from "../../redux/actions/sesion";
@@ -22,6 +23,7 @@ const MainPage = ({children}) =>{
         {name: "mis viajes", route: "travels", iconComponent:"global_outlined"},
         {name: "equipos", route: "teams", iconComponent:"team_outlined"},
         {name: "dispositivos", route: "devices", iconComponent:"mobile_outlined"},
+        {name: "almacen", route: "storage", iconComponent:"shop-outlined"},
     ];
     const history = useHistory();
     const [Collapsed, setCollapsed] = useState(false);
@@ -50,6 +52,8 @@ const MainPage = ({children}) =>{
             return <ImportOutlined style={{fontSize: "18px", color:"red"}} />  
         case "user-outlined":
             return <UserOutlined style={{fontSize: "18px"}} />  
+        case "shop-outlined":
+            return <ShopOutlined style={{fontSize: "18px"}} />  
         default:
           break;
       }

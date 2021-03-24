@@ -4,7 +4,15 @@ import { CloseCircleOutlined, CheckCircleOutlined } from '@ant-design/icons';
 
 const CardInvitation = ({title, onConfirm, onReject, idTeam, status, userWhoSendInvitationName}) =>{
     return(
-        <Row style={{backgroundColor: "white", width:"100%", height:"40px", borderRadius:10, fontSize:15, color:"#606060"}} align="middle">
+        <Row style={{
+            backgroundColor: "white", 
+            width:"100%", 
+            height:"40px", 
+            borderRadius:10, 
+            fontSize:15, 
+            color:"#606060",
+            boxShadow: "2px 2px 2px 1px rgba(0, 0, 0, 0.2)"
+            }} align="middle">
             <Col flex="5">
                 <span style={{marginLeft:25, textAlign:"center"}}>{title}</span>
             </Col>

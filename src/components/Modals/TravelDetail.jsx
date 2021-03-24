@@ -5,7 +5,6 @@ import AppChar from '../AppChar';
 import { IconButton } from '@material-ui/core';
 import { CompassOutlined} from '@ant-design/icons';
 
-const { Option } = Select;
 const { Title } = Typography;
  
 const TravelDetail = ({ 
@@ -25,26 +24,6 @@ const TravelDetail = ({
         fontFamily: "sans-serif",
         textAlign: "center"
     };
-    
-    // const data = [];
-    // const launchDate = 2004;
-
-    // const rand = 300;
-    // for (let i = 0; i < 7; i++) {
-    // const year = 2000 + i;
-    // const value = Math.random() * (rand + 50) + 100;
-    // let d = {
-    //     year: year,
-    //     value: value,
-    //     beforeLaunch: year <= launchDate ? value : undefined
-    // };
-
-    // data.push(d);
-    // }
-
-    // // change type to see that the overlap might not be appropriate towards the
-    // // end of the shorter chart
-    // const type = "monotone";
 
     const getTravelDetail = () =>{
         if(!travel){return;}
@@ -101,7 +80,11 @@ const TravelDetail = ({
     };
 
     const handleOpenMap = () =>{
-        window.open(`http://www.google.com/maps/place/20.774444763426768, -103.37235404186643/@20.774444763426768, -103.37235404186643,17z`);
+        const location = travelDetail.LastMeasurement.Location ? `http://www.google.com/maps/place/${travelDetail.LastMeasurement.Location}/@${travelDetail.LastMeasurement.Location},20z` : 
+        null;
+        if(location){
+            window.open(location);
+        }
     };
 
     return(

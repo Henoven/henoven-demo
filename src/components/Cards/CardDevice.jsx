@@ -37,11 +37,9 @@ const CardDevice = ({
                     width:"95%", 
                     height:"40px", 
                     borderRadius:10,
-                    borderWidth:1, 
-                    borderColor:"#a0a0a0",
-                    borderStyle:"solid",
                     fontSize:15, 
-                    color:"#606060"
+                    color:"#606060",
+                    boxShadow: "2px 2px 2px 1px rgba(0, 0, 0, 0.2)"
                 }}
                 align="middle"
                 justify="space-around">

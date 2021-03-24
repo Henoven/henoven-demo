@@ -10,11 +10,10 @@ const CardTeam = ({title, onEdit, onExit, idTeam,...rest}) =>{
                 width:"95%",  
                 height:"40px", 
                 borderRadius:10, 
-                borderStyle:"solid",
-                borderWidth:1,
-                borderColor:"#a0a0a0",
+                boxShadow: "2px 2px 2px 1px rgba(0, 0, 0, 0.2)",
                 fontSize:15, 
-                color:"#606060"}} 
+                color:"#606060"
+            }} 
             align="middle">
             <Col flex="auto">
                 <span style={{marginLeft:25, textAlign:"center"}}>{title}</span>
