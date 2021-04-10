@@ -1,17 +1,49 @@
 import React, { useState } from 'react';
-import { Card, Input, Popconfirm, Row } from 'antd';
+import { Card, Col, Input, Popconfirm, Row } from 'antd';
 import { SettingOutlined, DeleteOutlined, SaveOutlined} from '@ant-design/icons';
 import { Avatar, Collapse, List, ListItem, ListItemAvatar, ListItemText } from '@material-ui/core';
 import ExpandLess from '@material-ui/icons/ExpandLess';
 import ExpandMore from '@material-ui/icons/ExpandMore';
 import { AcUnitOutlined, StorefrontOutlined, WhatshotOutlined } from '@material-ui/icons';
 
+const ProductItem = ({
+    product,
+}) =>{
+    return(
+        <ListItem button >
+            <Row align="middle" gutter={20}>
+                <Col
+                    span={8}
+                >
+                    <ListItemText primary={product.ProductName} style={{columnSpan:8}}/>
+                </Col>
+                <Col
+                    span={8}
+                >
+                    <ListItemText primary="Temperatura máxima" style={{columnSpan:8}}/>
+                    <ListItemText secondary={`${product.MaxTemperature}°C`} style={{columnSpan:8}}/>
+                </Col>
+                <Col
+                    span={8}
+                >
+                    <ListItemText primary="Temperatura mínima" style={{columnSpan:8}}/>
+                    <ListItemText secondary={`${product.MinTemperature}°C`} style={{columnSpan:8}}/>
+                </Col>
+            </Row>
+        </ListItem>
+    );
+};
+
 const CardSection = ({
-    nameSection = "Carnes frías",
+    nameSection,
     maxTemperature = "10",
     minTemperature = "-20",
-    numberOfProducts = "48",
+    numberOfProducts,
     products,
+    onSave,
+    onDelete,
+    IdSection,
+    onConfigSection
 }) =>{
     
     const [open, setOpen] = useState(false);
@@ -27,6 +59,11 @@ const CardSection = ({
         setSave(true);
     };
 
+    const handleOnSave = () =>{
+        onSave(IdSection, name);
+        setSave(false);
+    }
+
     return(
         <Card 
             title={
@@ -40,14 +77,14 @@ const CardSection = ({
             }
             bordered={false}
             actions={[
-                    <SettingOutlined key="setting" />,
-                save &&<SaveOutlined key="edit" style={{color:"blue"}}/>,
+                    <SettingOutlined key="setting" onClick={onConfigSection}/>,
+                save &&<SaveOutlined key="edit" style={{color:"blue"}} onClick={handleOnSave}/>,
                 <Popconfirm
-                placement="top"
-                title="¿Quieres eliminar esta sección de almacén?"
-                okText="Sí"
-                onConfirm={()=> console.log("hola")}
-                cancelText="No"
+                    placement="top"
+                    title="¿Quieres eliminar esta sección de almacén?"
+                    okText="Sí"
+                    onConfirm={() => onDelete(IdSection)}
+                    cancelText="No"
                 >
                     <DeleteOutlined key="ellipsis" style={{color:"red"}}/>
                 </Popconfirm>,
@@ -57,7 +94,7 @@ const CardSection = ({
                 boxShadow: "2px 2px 2px 1px rgba(0, 0, 0, 0.2)"
             }}
         >
-            <div style={{ maxHeight:"400px"}}>
+            <div >
                 <Row justify="space-between">
                     <List style={{width:"100%"}}>
                         <ListItem>
@@ -66,7 +103,7 @@ const CardSection = ({
                                         <WhatshotOutlined />
                                     </Avatar>
                             </ListItemAvatar>
-                            <ListItemText primary="Temperatura máxima" secondary={`${maxTemperature}°C`} />
+                            <ListItemText primary="Temperatura máxima promedio" secondary={`${maxTemperature}°C`} />
                         </ListItem>
                         <ListItem>
                             <ListItemAvatar >
@@ -74,7 +111,7 @@ const CardSection = ({
                                         <AcUnitOutlined />
                                     </Avatar>
                             </ListItemAvatar>
-                            <ListItemText primary="Temperatura mínima" secondary={`${minTemperature}°C`}  />
+                            <ListItemText primary="Temperatura mínima promedio" secondary={`${minTemperature}°C`}  />
                         </ListItem>
                         <ListItem button onClick={handleClick} >
                             <ListItemAvatar >
@@ -86,20 +123,15 @@ const CardSection = ({
                             {open ? <ExpandLess /> : <ExpandMore />}
                         </ListItem>
                         <Collapse in={open} timeout="auto" unmountOnExit>
-                            <List component="div" disablePadding>
-                            <ListItem button >
-                                            <ListItemText primary="Ribeye" />
-                                        </ListItem>
-                            <ListItem button >
-                                            <ListItemText primary="Diesmillo" />
-                                        </ListItem>
-                                {/* {products &&
+                            <List style={{overflowY: products.length >=5 ? "scroll" : "hidden", maxHeight:400}}>
+                                {products &&
                                     products.map((product, index) => (
-                                        <ListItem button key={index}>
-                                            <ListItemText primary={product.ProductName} />
-                                        </ListItem>
+                                        <ProductItem
+                                            product={product}
+                                            key={index}
+                                        />
                                     ))
-                                } */}
+                                }
                             </List>
                         </Collapse>
                     </List>

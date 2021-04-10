@@ -45,7 +45,6 @@ const TravelDetail = ({
                 const { TravelData } = response.data;
                 setTravelDetail(response.data);
                 setTravelData(TravelData);
-                console.log(response.data);
             }
         })
         .catch((error) => {
