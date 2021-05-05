@@ -1,13 +1,14 @@
 import React, { useState, useEffect } from 'react';
-import { Badge, Button, Col, Divider, Input, Modal, message, Row, List, Select, Switch,  Typography, Popconfirm, Tooltip } from "antd";
+import { Badge, Button, Col, Input, Modal, message, Row, List, Select, Slider,  Typography, Popconfirm, Tooltip } from "antd";
 import Icon from '@mdi/react'
-import { mdiThermometerChevronDown, mdiThermometerChevronUp } from '@mdi/js';
+import { mdiCoolantTemperature, mdiThermometerChevronDown, mdiThermometerChevronUp } from '@mdi/js';
 import { PlusCircleOutlined } from '@ant-design/icons';
 import axios from "../../axios";
 
 import ItemSensor from "../../components/ItemSensor";
 import { Avatar } from '@material-ui/core';
 import ItemProduct from '../ItemProduct';
+import { Height } from '@material-ui/icons';
 
 const { Title } = Typography;
 
@@ -22,37 +23,42 @@ const OptionsSample = () =>{
     }
     return options;
 };
+const minTemperature = -40;
+const maxTemperature = 100;
+const defaultMinimumTemperature = 0;
+const defaultMaximumTemperature = 25;
 
-const TemperatureOptions = () => {
-    const minTemperature = -40;
-    const maxTemperature = 100;
-    let temperatureOptions = [];
-    for(var i= minTemperature; i <= maxTemperature; i++){
-        temperatureOptions.push({
-            Label: `${i} °C`,
-            Value:i
-        });
-    }
-    return temperatureOptions;
+const marks = {
+    [minTemperature]: `${minTemperature}°C`,
+    [defaultMinimumTemperature]: `${defaultMinimumTemperature}°C`,
+    [defaultMaximumTemperature]:`${defaultMaximumTemperature}°C`,
+    100: {
+      style: {
+        color: '#f50',
+      },
+      label: <strong>{maxTemperature}°C</strong>,
+    },
 };
 
 const DetailSectionModal = ({ 
     onClose,
     section,
     userId,
-    updateSection
 }) =>{
-
-    const [motherBoardName, setMotherBoardName] = useState(null);
-    const [senseFrequency, setSenseFrequency] = useState();
-    const [positionSensor, setPositionSensor] = useState();
-    const [sensorSerialNumber, setSensorSerialNumber] = useState();
     const [sensors, setSensors] = useState([]);
+    const [nameProduct, setNameProduct] = useState(null);
+    const [minTemperature, setMinTemperature] = useState(defaultMinimumTemperature);
+    const [maxTemperature, setMaxTemperature] = useState(defaultMaximumTemperature);
+    const [sectionDetail, setSectionDetail] = useState(section ? section : null);
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     const Status = {
         on: "processing",
         off: "default"
     };
+
+    function formatter(value) {
+        return `${value}°C`;
+    }
     
     // const getDetailMotherBoard = () =>{
     //     const params = new URLSearchParams();
@@ -78,7 +84,101 @@ const DetailSectionModal = ({
     //       console.log("Error", error);
     //     })
     // };
-    console.log(section);
+
+    const handleRangeTemperature = (value) =>{
+        setMinTemperature(value[0]);
+        setMaxTemperature(value[1]);
+    };
+
+    const handleDeleteProduct = ( IdProduct )=>{
+        const params = new URLSearchParams();
+        params.append("func", "WH-dp");
+        params.append("args", JSON.stringify({ 
+            IdProduct
+        }));
+        params.append("IdUserIS", userId);
+        axios.post("", params)
+        .then((response) => {
+            let validate = JSON.stringify(response);
+            const messageToShow = response.data.Echo.split(":")[1];
+            if (validate.includes("User|Error")) {
+                message.error(messageToShow);
+                return
+            }
+            else{
+                setSectionDetail(response.data);
+                message.success(messageToShow);
+            }
+        })
+        .catch((error) => {
+          console.log("Error", error);
+        });
+    };
+
+    const handleAddProduct = () => {
+        if(!nameProduct) {
+            message.error("Falta el nombre del producto");
+            return
+        };
+        const params = new URLSearchParams();
+        params.append("func", "WH-ap");
+        params.append("args", JSON.stringify({ 
+            IdSection: section.IdSection,
+            ProductName: nameProduct,
+            MaxTemperature:maxTemperature,
+            MinTemperature:minTemperature
+        }));
+        params.append("IdUserIS", userId);
+        axios.post("", params)
+        .then((response) => {
+            let validate = JSON.stringify(response);
+            const messageToShow = response.data.Echo.split(":")[1];
+            if (validate.includes("User|Error")) {
+                message.error(messageToShow);
+                return
+            }
+            else{
+                setSectionDetail(response.data);
+                message.success(messageToShow);
+            }
+            setNameProduct(null);
+            setMinTemperature(defaultMinimumTemperature);
+            setMaxTemperature(defaultMaximumTemperature);
+        })
+        .catch((error) => {
+          console.log("Error", error);
+        })
+    };
+
+    const handleUpdateProduct = (IdSection, IdProduct, ProductName, MaxTemperature, MinTemperature) =>{
+        const params = new URLSearchParams();
+        params.append("func", "WH-up");
+        params.append("args", JSON.stringify({ 
+            // IdSection,
+            IdProduct,
+            ProductName,
+            MaxTemperature,
+            MinTemperature
+        }));
+        params.append("IdUserIS", userId);
+        axios.post("", params)
+        .then((response) => {
+            let validate = JSON.stringify(response);
+            const messageToShow = response.data.Echo.split(":")[1];
+            if (validate.includes("User|Error")) {
+                message.error(messageToShow);
+                return
+            }
+            else{
+                console.log(response.data);
+                setSectionDetail(response.data);
+                message.success(messageToShow);
+            }
+        })
+        .catch((error) => {
+          console.log("Error", error);
+        })
+    };
 
     return(
         <Modal
@@ -99,26 +199,15 @@ const DetailSectionModal = ({
                         Eliminar sección de almacén
                     </Button>
                 </Popconfirm>,
-                <Button 
-                    key={0}
-                    onClick={onClose}>
-                    Cancelar
-                </Button>,
-                <Button 
-                    key={1}
-                    type="primary" 
-                    onClick={()=> console.log("guardar")}>
-                    Guardar
-                </Button>,
             ]}
         >
-            {section &&   
+            {sectionDetail &&   
                 <>
                     <Title 
                         level={5}
                         style={{marginTop:20}}
                     >
-                        Productos
+                        Agregar producto a sección {sectionDetail.Name}:
                     </Title>
                     <Row
                         justify="space-between"
@@ -126,83 +215,46 @@ const DetailSectionModal = ({
                        <Input 
                             placeholder="Nombre"
                             style={{ width: 300 }}
-                            onChange={(e) => setSensorSerialNumber(e.target.value)}
+                            onChange={(e) => setNameProduct(e.target.value)}
                         />
-                        <Row>
-                            <Icon path={mdiThermometerChevronDown}
-                                size={1}
-                                color="gray"
+                        <Col md={9}>
+                            <h4>Rango de temperatura</h4>
+                            <Slider 
+                                range 
+                                min={-40} 
+                                max={100} 
+                                marks={marks}
+                                defaultValue={[defaultMinimumTemperature, defaultMaximumTemperature]} 
+                                style={{widht:200}}
+                                onChange={handleRangeTemperature}
+                                tipFormatter={formatter}
                             />
-                            <Select 
-                                allowClear
-                                showSearch
-                                style={{ width: 200 }}
-                                placeholder="Temperatura máxima"
-                                optionFilterProp="children"
-                                onChange={(value) => setPositionSensor(value)}
-                                filterOption={(input, option) =>
-                                    option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
-                                }
-                            >
-                                {
-                                    TemperatureOptions().map((option, index) =>
-                                    <Select.Option 
-                                        key={index} 
-                                        value={option.Value}
-                                    >
-                                        {option.Label}
-                                    </Select.Option>
-                                    )
-                                }
-                            </Select>
-                        </Row>
-                        <Row>
-                            <Icon path={mdiThermometerChevronUp}
-                                size={1}
-                                color="gray"
-                            />
-                            <Select 
-                                allowClear
-                                showSearch
-                                style={{ width: 200 }}
-                                placeholder="Temperatura máxima"
-                                optionFilterProp="children"
-                                onChange={(value) => setPositionSensor(value)}
-                                filterOption={(input, option) =>
-                                    option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
-                                }
-                            >
-                                {
-                                    TemperatureOptions().map((option, index) =>
-                                    <Select.Option 
-                                        key={index} 
-                                        value={option.Value}
-                                    >
-                                        {option.Label}
-                                    </Select.Option>
-                                    )
-                                }
-                            </Select>
-                        </Row>
+                        </Col>
                         <Tooltip title="Agregar producto">
                             <Button   
                                 style={{marginRight:10}}
                                 shape="circle" 
                                 icon={<PlusCircleOutlined style={{color:"#3498db", fontSize:25}}/>}
-                                onClick={()=> console.log("agregar")} 
+                                onClick={handleAddProduct} 
                             />
                         </Tooltip>
                     </Row>
                     <List
                         itemLayout="horizontal"
-                        dataSource={section.products}
-                        key={(section) => section.IdSection}
+                        style={{
+                            overflowY: "scroll",
+                            overflowX:"hidden",
+                            height:300
+                        }}
+                        dataSource={sectionDetail.products}
+                        key={(product) => product.IdProduct}
                         renderItem={item => (
                             <List.Item style={{paddingBottom:1}}>
                                 <ItemProduct
+                                    idSection= {sectionDetail.IdSection}
                                     data={item}
-                                    onSave={()=> console.log("guardar producto")}
-                                    onUnlink={()=> console.log("desvincular")}
+                                    onSave={handleUpdateProduct}
+                                    onDelete={handleDeleteProduct}
                                 />
                             </List.Item>
                         )}

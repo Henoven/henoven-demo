@@ -1,11 +1,14 @@
 import React, {useState, useEffect} from 'react';
-import { Modal, Button, message, Select, Typography, Col, Row, Popconfirm, Tooltip} from "antd";
+import { Modal, Button, message,Typography, Col, Row, Popconfirm, Tooltip, Progress} from "antd";
 import axios from "../../axios";
 import AppChar from '../AppChar';
 import { IconButton } from '@material-ui/core';
 import { CompassOutlined} from '@ant-design/icons';
+import Geocode from "react-geocode";
+import {KeyGeocoding} from "../../constants";
 
 const { Title } = Typography;
+
  
 const TravelDetail = ({ 
     onClose, 
@@ -15,6 +18,7 @@ const TravelDetail = ({
 }) =>{
     const [travelDetail, setTravelDetail] = useState(null);
     const [travelData, setTravelData] = useState(null);
+    const [address, setAddress] = useState(null);
 
     useEffect(() => {
         getTravelDetail();
@@ -45,11 +49,28 @@ const TravelDetail = ({
                 const { TravelData } = response.data;
                 setTravelDetail(response.data);
                 setTravelData(TravelData);
+                setAddress(getAddressFromLatLong(response.data.LastMeasurement.Location));
             }
         })
         .catch((error) => {
         console.log("Error", error);
         })
+    };
+
+    const getAddressFromLatLong = ( location )=>{
+        if(!location) return;
+        const latlong = location?.split(",");
+        Geocode.setApiKey(KeyGeocoding);
+        Geocode.fromLatLng(latlong[0], latlong[1]).then(
+            (response) => {
+              const address = response.results[0].formatted_address;
+              console.log(address);
+              return address;
+            },
+            (error) => {
+              console.error(error);
+            }
+          );
     };
 
     const handleCancelTravel = () =>{
@@ -79,17 +100,26 @@ const TravelDetail = ({
     };
 
     const handleOpenMap = () =>{
-        const location = travelDetail.LastMeasurement.Location ? `http://www.google.com/maps/place/${travelDetail.LastMeasurement.Location}/@${travelDetail.LastMeasurement.Location},20z` : 
-        null;
+        const location = `http://www.google.com/maps/place/${travelDetail?.LastMeasurement?.Location}/@${travelDetail?.LastMeasurement?.Location},20z`;
         if(location){
             window.open(location);
         }
     };
+    const getAverageHumidity = () =>{
+        if(! travelDetail?.TravelData?.Humidity?.Data) return 0;
+        const elmt = travelDetail.TravelData.Humidity.Data;
+        var sum = 0;
+        for( var i = 0; i < elmt.length; i++ ){
+            sum += parseInt( elmt[i], 10 ); //don't forget to add the base
+        }
+        var avg = sum/elmt.length;
+        return avg;
+    }
 
     return(
         <Modal
             width="80%"
-            title={`Detalle de viaje: ${travel.TravelExecution}`}
+            title={`Detalle de viaje: ${travel?.TravelExecution}`}
             visible
             onCancel={onClose}
             footer={[
@@ -162,12 +192,14 @@ const TravelDetail = ({
                             justify="space-between"
                             align="middle"
                         >
-                            <span style={{flex:1}}>Bosues de la Cascada, 280, Zapopan, Jalisco</span>
-                            <Tooltip title="Abrir en Google Maps">
-                                <IconButton onClick={()=> handleOpenMap()}>
-                                    <CompassOutlined />
-                                </IconButton>
-                            </Tooltip>
+                            <span style={{flex:1}}>{address ? address : "Sin dirección"}</span>
+                            {address &&
+                                <Tooltip title="Abrir en Google Maps">
+                                    <IconButton onClick={()=> handleOpenMap()}>
+                                        <CompassOutlined />
+                                    </IconButton>
+                                </Tooltip>
+                            }
                         </Row>
                         <Title level={5} style={{color:"#3498db"}}>
                             Última medición
@@ -214,8 +246,17 @@ const TravelDetail = ({
                                 <div>{ travelDetail.LastMeasurement.Sensor3Hum + "%"}</div>
                             </Col>
                         </Row>
+                        <Title level={5} style={{color:"#3498db"}}>
+                            Humedad promedio
+                        </Title>
+                        <Progress
+                            percent={getAverageHumidity()}
+                            strokeWidth={30}
+                            status="active"
+                            strokeColor="#3c5c9e"
+                        />
                     </Col>
-                    <Col flex={1}>
+                    <Col flex={3}>
                         {travelData &&
                             <div style={styles}>
                                     <AppChar
@@ -223,15 +264,6 @@ const TravelDetail = ({
                                     />
                             </div>
                         }
-                        <Title 
-                            level={5}
-                        style={
-                            {
-                                textAlign:"end"
-                            }
-                        }>
-                            Módulo: 265461Sda54d
-                        </Title>
                     </Col>
                 </Row>
             }
@@ -241,3 +273,4 @@ const TravelDetail = ({
 }
 
 export default TravelDetail;
+

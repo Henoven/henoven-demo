@@ -21,6 +21,11 @@ const StorageScreen = ({
 
     const [Modal, setModal] = useState(null);
 
+    const handleClose = () =>{
+        setModal(null);
+        getWarehouseSections();
+    };
+
     const Modals = {
         "newSectionModal": (
             <NewSectionModal  
@@ -34,7 +39,7 @@ const StorageScreen = ({
         "detailSectionModal": (
             <DetailSectionModal  
                 onOk={() => console.log("Ok")}
-                onClose={()=> setModal(null)}
+                onClose={()=> handleClose()}
                 userId={user.IdUser}
                 section={sectionSelected}
                 // IdWarehouse={idWarehouse}

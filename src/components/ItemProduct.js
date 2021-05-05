@@ -1,49 +1,81 @@
 import React, { useState } from 'react';
-import { Button, Row, Col, Input, Select, Typography, Popconfirm } from "antd";
+import { Button, Row, Col, Input, Select, Typography, Popconfirm, Slider } from "antd";
 import { DeleteOutlined, DingtalkOutlined, SaveFilled } from '@ant-design/icons';
+import Icon from '@mdi/react'
+import { mdiThermometerChevronDown, mdiThermometerChevronUp } from '@mdi/js';
 
 const { Title } = Typography;
 
-const TemperatureOptions = () => {
-    const minTemperature = -40;
-    const maxTemperature = 100;
-    let temperatureOptions = [];
-    for(var i= minTemperature; i <= maxTemperature; i++){
-        temperatureOptions.push({
-            Label: `${i} °C`,
-            Value:i
-        });
-    }
-    return temperatureOptions;
-};
+const MinTemperature = -40;
+const MaxTemperature = 100;
 
 const ItemProduct = ({
     data,
     onSave,
-    onUnlink
+    onDelete,
+    idSection
 }) =>{
 
     const [edited, setEdited] = useState(false);
-    const [nameSensor, setNameSensor] = useState(data.Name);
-    const [positionSelected, setPositionSelected] = useState(data.Position);
+    const [productName, setProductName] = useState(data.ProductName);
+    const [minTemperature, setMinTemperature] = useState(data.MinTemperature);
+    const [maxTemperature, setMaxTemperature] = useState(data.MaxTemperature);
 
-    const handleSelect = (value) =>{
-        setEdited(true);
-        setPositionSelected(value);
+    const marks = {
+        [-40]: `${MinTemperature} °C`,
+        [data.MinTemperature]:{ 
+            label:`${data.MinTemperature} °C`,
+            style:{
+                marginRight:20
+            }
+        },
+        [data.MaxTemperature]: { 
+            label:`${data.MaxTemperature} °C`,
+            style:{
+                marginLeft:20
+            }
+        },
+        100: {
+          style: {
+            color: '#f50',
+          },
+          label: <strong>{MaxTemperature}°C</strong>,
+        },
     };
+
 
     const handleChangeText = (value) =>{
         setEdited(true);
-        setNameSensor(value);
+        setProductName(value);
     };
 
     const handleOnSave = () =>{
-        onSave(data.IdSensor, nameSensor, positionSelected);
+        onSave(idSection, data.IdProduct, productName, maxTemperature, minTemperature);
         setEdited(false);
+    };
+    
+    function formatter(value) {
+        return `${value}°C`;
     }
+
+    const handleRangeTemperature = (value) =>{
+        setEdited(true);
+        setMinTemperature(value[0]);
+        setMaxTemperature(value[1]);
+    };
+
     return(
         <Row    
-            style={{ height:40, borderRadius:10, borderColor:"#bcd6e8", borderWidth:1 ,borderStyle:"solid", marginTop:5,flex:1}}
+            style={{ 
+                height:60, 
+                borderRadius:10, 
+                borderColor:"#bcd6e8", 
+                borderWidth:1,
+                borderStyle:"solid", 
+                flex:1, 
+                marginLeft:5,
+                marginRight:5
+            }}
             align="middle"
             gutter={5}
             justify="space-between"
@@ -55,56 +87,24 @@ const ItemProduct = ({
                     onChange={(e) => handleChangeText(e.target.value)}
                 />
             </Col>
-            <Select 
-                allowClear
-                showSearch
-                style={{ width: 200 }}
-                placeholder="Temperatura máxima"
-                optionFilterProp="children"
-                filterOption={(input, option) =>
-                    option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
-                }
-                onChange={(value) => handleSelect(value)}
-            >
-                {
-                    TemperatureOptions().map((option, index) =>
-                    <Select.Option 
-                        key={index} 
-                        value={option.Value}
-                    >
-                        {option.Label}
-                    </Select.Option>
-                    )
-                }
-            </Select>
-            <Select 
-                allowClear
-                showSearch
-                style={{ width: 200, marginLeft:10 }}
-                placeholder="Temperatura mínima"
-                optionFilterProp="children"
-                filterOption={(input, option) =>
-                    option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
-                }
-                onChange={(value) => handleSelect(value)}
-            >
-                {
-                    TemperatureOptions().map((option, index) =>
-                    <Select.Option 
-                        key={index} 
-                        value={option.Value}
-                    >
-                        {option.Label}
-                    </Select.Option>
-                    )
-                }
-            </Select>
+            <Col md={9}>
+                <Slider 
+                    range 
+                    min={-40} 
+                    max={100} 
+                    marks={marks}
+                    // defaultValue={[data.MinTemperature, data.MaxTemperature]} 
+                    style={{widht:200}}
+                    onChange={handleRangeTemperature}
+                    tipFormatter={formatter}
+                />
+            </Col>
             <Row justify="end" style={{flex:1, marginRight:5}}>
                 <Popconfirm 
                     placement="topLeft"
                     title="¿Seguro que quieres desvincular el sensor?"
                     okText="Sí"
-                    onConfirm={()=> onUnlink(data.IdSensor)}
+                    onConfirm={()=> onDelete(data.IdProduct)}
                     cancelText="No"
                     >
                     <Button shape="circle" icon={<DeleteOutlined style={{color:"#e74d3d"}}/>}/>

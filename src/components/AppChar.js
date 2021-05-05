@@ -1,18 +1,16 @@
 import React, { useState } from 'react';
 import Chart from "react-apexcharts";
-import TravelDetail from './Modals/TravelDetail';
 
 const AppChar = ({
   travelData
 }) =>{
 
-    const[sensor1, setSensor1] = useState(travelData.Temperature.Sensor1);
-    const[sensor2, setSensor2] = useState(travelData.Temperature.Sensor2);
-    const[sensor3, setSensor3] = useState(travelData.Temperature.Sensor3);
-    const[time, setTime] = useState(travelData.Time);
-    const[humidity, setHumidity] = useState(travelData.Humidity);
+    const[sensor1] = useState(travelData?.Temperature?.Sensor1);
+    const[sensor2] = useState(travelData?.Temperature?.Sensor2);
+    const[sensor3] = useState(travelData?.Temperature?.Sensor3);
+    const[time] = useState(travelData?.Time);
 
-    const [options, setOptions]= useState({
+    const [options]= useState({
         chart: {
             height: 350,
             type: 'line',
@@ -33,7 +31,7 @@ const AppChar = ({
             }
           },
           title: {
-            text: 'Información de sensores',
+            text: 'Temperatura de sensores',
             align: 'left',
             style: {
               fontSize: "16px",
@@ -69,48 +67,23 @@ const AppChar = ({
               text: 'Temperatura',
             },
           },
-          {
-            opposite: true,
-            min: 0,
-            max: 100,
-            decimalsInFloat:0,
-            axisTicks: {
-              show: true
-            },
-            labels: {
-              style: {
-                colors: "##b3deff"
-              }
-            },
-            title: {
-              text: "Humedad",
-              style:{
-                  color:"#82a8ff"
-              }
-            }
-          }
         ]});
-    const [series, setSeries] = useState([
+    const [series] = useState([
         {
-            name: sensor1.Label,
+            name: sensor1?.Label,
             type:"line",
-            data: sensor1.Data
+            data: sensor1?.Data
         },
         {
-            name: sensor2.Label,
+            name: sensor2?.Label,
             type:"line",
-            data: sensor2.Data
+            data: sensor2?.Data
         },
         {
-            name: sensor3.Label,
+            name: sensor3?.Label,
             type:"line",
-            data: sensor3.Data
+            data: sensor3?.Data
         },
-        {
-            name: humidity.Label,
-            type:"area",
-            data: humidity.Data
-        }
     ]);
 
     return (

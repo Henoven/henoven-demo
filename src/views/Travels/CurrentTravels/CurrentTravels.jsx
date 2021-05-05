@@ -42,6 +42,7 @@ const StatusColor = {
 
 
 const CurrentTravels = ({user}) =>{
+
   const [Modal, setModal] = useState(null);
   const [travels, setTravels] = useState([]);
   const [travelSelected, setTravelSelected] = useState(null);
@@ -148,28 +149,9 @@ const CurrentTravels = ({user}) =>{
                 <Button 
                     shape="circle" 
                     icon={<PlusCircleOutlined style={{color:"#3498db", fontSize:25}}/>}
-                    onClick={()=> setModal("newTravelModal")} />
+                    onClick={()=> setModal("travelDetail")} />
             </Tooltip>
       </Row>
-      {/* <Search style={{marginBottom:20}}/> */}
-      {/* <Title level={5}>Filtrar por</Title>
-      <Row 
-        gutter={{ xs: 8, sm: 16, md: 24, lg: 32 }} 
-        align="middle" 
-        style={{marginBottom:10}}>
-          <Col >
-              <Select placeholder="Estatus"/>
-          </Col>
-          <Col>
-              <Select placeholder="Tipo de viaje"/>
-          </Col>
-          <Col >
-              <Select placeholder="Destino"/>
-          </Col>
-          <Col >
-              <DatePicker placeholder="Fecha de inicio"/>
-          </Col>
-      </Row> */}
       <Table 
         dataSource={Data} 
         columns={columns} 
