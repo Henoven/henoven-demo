@@ -1,14 +1,22 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Chart from "react-apexcharts";
 
 const AppChar = ({
   travelData
 }) =>{
 
-    const[sensor1] = useState(travelData?.Temperature?.Sensor1);
-    const[sensor2] = useState(travelData?.Temperature?.Sensor2);
-    const[sensor3] = useState(travelData?.Temperature?.Sensor3);
-    const[time] = useState(travelData?.Time);
+    const[sensor1, setSensor1] = useState(travelData?.Temperature?.Sensor1);
+    const[sensor2, setSensor2] = useState(travelData?.Temperature?.Sensor2);
+    const[sensor3, setSensor3] = useState(travelData?.Temperature?.Sensor3);
+    const[time, setTime] = useState(travelData?.Time);
+
+    useEffect(()=> {
+      setSensor1(travelData?.Temperature?.Sensor1);
+      setSensor2(travelData?.Temperature?.Sensor2);
+      setSensor3(travelData?.Temperature?.Sensor3);
+      setTime(travelData?.Time);
+      // eslint-disable-line react-hooks/exhaustive-deps
+    }, [travelData])
 
     const [options]= useState({
         chart: {

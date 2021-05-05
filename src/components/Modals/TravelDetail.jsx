@@ -22,6 +22,8 @@ const TravelDetail = ({
 
     useEffect(() => {
         getTravelDetail();
+
+        // eslint-disable-line react-hooks/exhaustive-deps
     }, []);
 
     const styles = {
@@ -130,7 +132,7 @@ const TravelDetail = ({
                     okText="Sí"
                     onConfirm={handleCancelTravel}
                     cancelText="No"
-                    >
+                >
                     <Button type="primary" danger>
                         Cancelar viaje
                     </Button>
@@ -139,7 +141,7 @@ const TravelDetail = ({
                     key={1}
                     type="primary" 
                     onClick={()=> getTravelDetail()}
-                    >
+                >
                     Refrescar
                 </Button>,
 
