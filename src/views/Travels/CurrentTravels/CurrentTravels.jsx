@@ -149,7 +149,7 @@ const CurrentTravels = ({user}) =>{
                 <Button 
                     shape="circle" 
                     icon={<PlusCircleOutlined style={{color:"#3498db", fontSize:25}}/>}
-                    onClick={()=> setModal("travelDetail")} />
+                    onClick={()=> setModal("newTravelModal")} />
             </Tooltip>
       </Row>
       <Table 

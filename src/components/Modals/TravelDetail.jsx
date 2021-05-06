@@ -52,6 +52,7 @@ const TravelDetail = ({
                 setTravelDetail(response.data);
                 setTravelData(TravelData);
                 setAddress(getAddressFromLatLong(response.data.LastMeasurement.Location));
+                console.log(response.data);
             }
         })
         .catch((error) => {
@@ -66,8 +67,7 @@ const TravelDetail = ({
         Geocode.fromLatLng(latlong[0], latlong[1]).then(
             (response) => {
               const address = response.results[0].formatted_address;
-              console.log(address);
-              return address;
+              setAddress(address);
             },
             (error) => {
               console.error(error);
