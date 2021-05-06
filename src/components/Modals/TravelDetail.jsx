@@ -52,7 +52,6 @@ const TravelDetail = ({
                 setTravelDetail(response.data);
                 setTravelData(TravelData);
                 setAddress(getAddressFromLatLong(response.data.LastMeasurement.Location));
-                console.log(response.data);
             }
         })
         .catch((error) => {
@@ -64,6 +63,7 @@ const TravelDetail = ({
         if(!location) return;
         const latlong = location?.split(",");
         Geocode.setApiKey(KeyGeocoding);
+        Geocode.setLanguage("es");
         Geocode.fromLatLng(latlong[0], latlong[1]).then(
             (response) => {
               const address = response.results[0].formatted_address;
@@ -107,6 +107,7 @@ const TravelDetail = ({
             window.open(location);
         }
     };
+
     const getAverageHumidity = () =>{
         if(! travelDetail?.TravelData?.Humidity?.Data) return 0;
         const elmt = travelDetail.TravelData.Humidity.Data;
@@ -115,7 +116,7 @@ const TravelDetail = ({
             sum += parseInt( elmt[i], 10 ); //don't forget to add the base
         }
         var avg = sum/elmt.length;
-        return avg;
+        return Math.round(avg);
     }
 
     return(
