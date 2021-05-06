@@ -72,7 +72,8 @@ const TravelDetail = ({
             (error) => {
               console.error(error);
             }
-          );
+          )
+          .catch();
     };
 
     const handleCancelTravel = () =>{
