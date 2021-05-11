@@ -71,6 +71,8 @@ const RegisterDeviceModal = ({
                 setLoading(false);
                 return;
             }
+            const messageToShow = response.data.Echo.split(":")[1];
+            message.success(messageToShow);
             setLoading(false);
             setSerialNumber("");
             loadDevices();
