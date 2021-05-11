@@ -1,10 +1,6 @@
 import React, { useState } from 'react';
-import { Button, Row, Col, Input, Select, Typography, Popconfirm, Slider } from "antd";
-import { DeleteOutlined, DingtalkOutlined, SaveFilled } from '@ant-design/icons';
-import Icon from '@mdi/react'
-import { mdiThermometerChevronDown, mdiThermometerChevronUp } from '@mdi/js';
-
-const { Title } = Typography;
+import { Button, Row, Col, Input, Popconfirm, Slider } from "antd";
+import { DeleteOutlined, SaveFilled } from '@ant-design/icons';
 
 const MinTemperature = -40;
 const MaxTemperature = 100;
@@ -102,7 +98,7 @@ const ItemProduct = ({
             <Row justify="end" style={{flex:1, marginRight:5}}>
                 <Popconfirm 
                     placement="topLeft"
-                    title="¿Seguro que quieres desvincular el sensor?"
+                    title="¿Seguro que quieres eliminar este producto?"
                     okText="Sí"
                     onConfirm={()=> onDelete(data.IdProduct)}
                     cancelText="No"
