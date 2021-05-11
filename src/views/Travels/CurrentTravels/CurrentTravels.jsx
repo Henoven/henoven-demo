@@ -81,7 +81,7 @@ const CurrentTravels = ({user}) =>{
       key: 'endTime',
     },
     {
-      title: 'Detalle',
+      title: 'Información',
       dataIndex: 'IdTravel',
       key: 'detail',
       render: (text, record) => (

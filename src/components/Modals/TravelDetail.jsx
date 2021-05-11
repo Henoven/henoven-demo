@@ -123,29 +123,39 @@ const TravelDetail = ({
     return(
         <Modal
             width="80%"
-            title={`Detalle de viaje: ${travel?.TravelExecution}`}
+            title={`Información de viaje: ${travel?.TravelExecution}`}
             visible
             onCancel={onClose}
             footer={[
-                <Popconfirm 
-                    key={0}
-                    placement="topLeft"
-                    title="¿Seguro que quieres cancelar el viaje?"
-                    okText="Sí"
-                    onConfirm={handleCancelTravel}
-                    cancelText="No"
-                >
-                    <Button type="primary" danger>
-                        Cancelar viaje
-                    </Button>
-                </Popconfirm>,
-                <Button 
-                    key={1}
-                    type="primary" 
-                    onClick={()=> getTravelDetail()}
-                >
-                    Refrescar
-                </Button>,
+                <>
+                {
+                    travel?.Status !== "cancell" &&
+                    <Popconfirm 
+                        key={0}
+                        placement="topLeft"
+                        title="¿Seguro que quieres terminar el viaje?"
+                        okText="Sí"
+                        onConfirm={handleCancelTravel}
+                        cancelText="No"
+                    >
+                        <Button type="primary" danger>
+                            Terminar viaje
+                        </Button>
+                    </Popconfirm>
+                }
+                </>,
+                <>
+                    {  
+                        travel?.Status !== "cancell" &&
+                        <Button 
+                            key={1}
+                            type="primary" 
+                            onClick={()=> getTravelDetail()}
+                        >
+                            Refrescar
+                        </Button>
+                    }
+                </>,
 
             ]}
         >
