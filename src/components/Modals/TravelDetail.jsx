@@ -1,11 +1,14 @@
 import React, {useState, useEffect} from 'react';
-import { Modal, Button, message,Typography, Col, Row, Popconfirm, Tooltip, Progress} from "antd";
+import { Button, message,Typography, Col, Row, Popconfirm, Tooltip, Progress} from "antd";
 import axios from "../../axios";
 import AppChar from '../AppChar';
 import { IconButton } from '@material-ui/core';
 import { CompassOutlined} from '@ant-design/icons';
 import Geocode from "react-geocode";
+
+import Modal from "../../components/Modals/Modal";
 import {KeyGeocoding} from "../../constants";
+import {getDateFiltered} from "../../api/dateService";
 
 const { Title } = Typography;
 
@@ -126,38 +129,27 @@ const TravelDetail = ({
             title={`Información de viaje: ${travel?.TravelExecution}`}
             visible
             onCancel={onClose}
-            footer={[
-                <>
-                {
-                    travel?.Status !== "cancell" &&
-                    <Popconfirm 
-                        key={0}
-                        placement="topLeft"
-                        title="¿Seguro que quieres terminar el viaje?"
-                        okText="Sí"
-                        onConfirm={handleCancelTravel}
-                        cancelText="No"
-                    >
-                        <Button type="primary" danger>
-                            Terminar viaje
-                        </Button>
-                    </Popconfirm>
-                }
-                </>,
-                <>
-                    {  
-                        travel?.Status !== "cancell" &&
-                        <Button 
-                            key={1}
-                            type="primary" 
-                            onClick={()=> getTravelDetail()}
-                        >
-                            Refrescar
-                        </Button>
-                    }
-                </>,
-
-            ]}
+            footer={ travel?.Status !== "cancell" ? [
+                <Popconfirm 
+                    key={0}
+                    placement="topLeft"
+                    title="¿Seguro que quieres terminar el viaje?"
+                    okText="Sí"
+                    onConfirm={handleCancelTravel}
+                    cancelText="No"
+                >
+                    <Button type="primary" danger>
+                        Terminar viaje
+                    </Button>
+                </Popconfirm>,
+                <Button 
+                    key={1}            
+                    type="primary" 
+                    onClick={()=> getTravelDetail()}
+                >
+                    Refrescar
+                </Button>,
+            ] : null}
         >
          <>
             {travelDetail &&
@@ -175,7 +167,7 @@ const TravelDetail = ({
                             padding:5,
                             marginBottom:10
                         }}>
-                            {travelDetail.StartTime}
+                            {getDateFiltered(travelDetail.StartTime)}
                         </div>
                         <Title level={5} style={{color:"#3498db"}}>
                             Última conexión
@@ -189,7 +181,7 @@ const TravelDetail = ({
                             padding:5,
                             marginBottom:10
                         }}>
-                            {travelDetail.LastMeasurement.Time}
+                            {getDateFiltered(travelDetail.LastMeasurement.Time)}
                         </div>
                         <Title level={5} style={{color:"#3498db"}}>
                             Ubicación
@@ -242,8 +234,8 @@ const TravelDetail = ({
                                 borderRightColor:"#a0a0a0",
                             }}>
                                 <div>Sensor 1</div>
-                                <div>{ travelDetail.LastMeasurement.Sensor1Temp + "°C"}</div>
-                                <div>{ travelDetail.LastMeasurement.Sensor1Hum + "%"}</div>
+                                <div>{ travelDetail.LastMeasurement.Sensor1Temp }</div>
+                                <div>{ travelDetail.LastMeasurement.Sensor1Hum }</div>
                             </Col>
                             <Col flex={1} style={{
                                 borderRightStyle:"solid",
@@ -251,13 +243,13 @@ const TravelDetail = ({
                                 borderRightColor:"#a0a0a0",
                             }}>
                                 <div>Sensor 2</div>
-                                <div>{ travelDetail.LastMeasurement.Sensor2Temp + "°C"}</div>
-                                <div>{ travelDetail.LastMeasurement.Sensor2Hum + "%"}</div>
+                                <div>{ travelDetail.LastMeasurement.Sensor2Temp }</div>
+                                <div>{ travelDetail.LastMeasurement.Sensor2Hum }</div>
                             </Col>
                             <Col flex={1} >
                                 <div>Sensor 3</div>
-                                <div>{ travelDetail.LastMeasurement.Sensor3Temp + "°C"}</div>
-                                <div>{ travelDetail.LastMeasurement.Sensor3Hum + "%"}</div>
+                                <div>{ travelDetail.LastMeasurement.Sensor3Temp }</div>
+                                <div>{ travelDetail.LastMeasurement.Sensor3Hum }</div>
                             </Col>
                         </Row>
                         <Title level={5} style={{color:"#3498db"}}>

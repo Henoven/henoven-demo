@@ -5,7 +5,6 @@ import { sha256 } from "js-sha256";
 import axios from "../../axios";
 import { useHistory } from 'react-router-dom';
 import { MailOutlined, LockOutlined } from '@ant-design/icons';
-import Title from 'antd/lib/typography/Title';
 
 const Login = ({onChange, doLogIn}) => {
 

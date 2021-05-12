@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import { Badge, Button, Col, Divider, Input, Modal, message, Row, List, Select, Switch,  Typography, Popconfirm } from "antd";
+import { Badge, Button, Col, Divider, Input, message, Row, List, Select, Switch,  Typography, Popconfirm } from "antd";
 import axios from "../../axios";
 
 import ItemSensor from "../../components/ItemSensor";
+import Modal from "../../components/Modals/Modal";
 
 const { Title } = Typography;
 

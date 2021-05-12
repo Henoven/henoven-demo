@@ -1,8 +1,8 @@
 import React, {useState, useEffect} from 'react';
-import { Modal, Input, Button, message, Select, Typography } from "antd";
+import { Input, Button, message, Typography } from "antd";
 import axios from "../../axios";
 
-const { Option } = Select;
+import Modal from "../../components/Modals/Modal";
 const { Title } = Typography;
  
 const RegisterDeviceModal = ({ 
@@ -14,7 +14,6 @@ const RegisterDeviceModal = ({
     
     const [Loading, setLoading] = useState(false);
     const [name, setName] = useState();
-    const [idTeamSelected, setIdTeamSelected] = useState();
     const [teams, setTeams] = useState([]);
 
     useEffect(() => {
@@ -46,7 +45,6 @@ const RegisterDeviceModal = ({
     };
 
     const areFieldsCompleted = () => {
-        // return name && idTeamSelected;
         return name ? true : false;
     };
 
@@ -103,30 +101,6 @@ const RegisterDeviceModal = ({
                 </Button>,
             ]}
         >
-            {/* <Title level={5}>
-                Equipo
-            </Title>
-            <Select
-                allowClear
-                showSearch
-                style={{ width: 200 }}
-                placeholder="Selecciona un equipo"
-                optionFilterProp="children"
-                onChange={(value) => setIdTeamSelected(value)}
-                filterOption={(input, option) =>
-                option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
-                }
-            >
-                {
-                    teams.map((team) =>
-                        <Option 
-                            key={team.IdTeam}
-                            value={team.IdTeam}>
-                                {team.TeamName}
-                        </Option>
-                    )
-                }
-            </Select> */}
             <Title level={5}>
                 Nombre de sección
             </Title>

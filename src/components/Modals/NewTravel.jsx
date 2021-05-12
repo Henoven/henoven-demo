@@ -1,9 +1,10 @@
 import React, { useState, useEffect} from 'react';
-import { Modal, Input, Button, message, Select, Row } from "antd";
+import { Input, Button, message, Select} from "antd";
 import axios from "../../axios";
-import Title from 'antd/lib/typography/Title';
 import TextArea from 'antd/lib/input/TextArea';
 import TitleComponent from '../TitleComponent';
+
+import Modal from "../../components/Modals/Modal";
 
 const {Option} = Select;
 

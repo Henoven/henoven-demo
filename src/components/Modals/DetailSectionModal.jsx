@@ -1,28 +1,13 @@
-import React, { useState, useEffect } from 'react';
-import { Badge, Button, Col, Input, Modal, message, Row, List, Select, Slider,  Typography, Popconfirm, Tooltip } from "antd";
-import Icon from '@mdi/react'
-import { mdiCoolantTemperature, mdiThermometerChevronDown, mdiThermometerChevronUp } from '@mdi/js';
+import React, { useState } from 'react';
+import { Button, Col, Input, message, Row, List, Slider,  Typography, Popconfirm, Tooltip } from "antd";
 import { PlusCircleOutlined } from '@ant-design/icons';
 import axios from "../../axios";
 
-import ItemSensor from "../../components/ItemSensor";
-import { Avatar } from '@material-ui/core';
+import Modal from "../../components/Modals/Modal";
 import ItemProduct from '../ItemProduct';
-import { Height } from '@material-ui/icons';
 
 const { Title } = Typography;
 
-const OptionsSample = () =>{
-    const maxSampleTime=60;
-    let options = [];
-    for(let i=1; i<=maxSampleTime; i++){
-        options.push({
-            Label: i.toString() + (i <=1 ? " minuto" : " minutos"),
-            Value:i
-        });
-    }
-    return options;
-};
 const minTemperature = -40;
 const maxTemperature = 100;
 const defaultMinimumTemperature = 0;
@@ -45,45 +30,15 @@ const DetailSectionModal = ({
     section,
     userId,
 }) =>{
-    const [sensors, setSensors] = useState([]);
     const [nameProduct, setNameProduct] = useState(null);
     const [minTemperature, setMinTemperature] = useState(defaultMinimumTemperature);
     const [maxTemperature, setMaxTemperature] = useState(defaultMaximumTemperature);
     const [sectionDetail, setSectionDetail] = useState(section ? section : null);
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    const Status = {
-        on: "processing",
-        off: "default"
-    };
 
     function formatter(value) {
         return `${value}°C`;
     }
-    
-    // const getDetailMotherBoard = () =>{
-    //     const params = new URLSearchParams();
-    //     params.append("func", "MB-gmbd");
-    //     params.append("args", JSON.stringify({ IdMotherBoard: motherBoard.IdMotherBoard }));
-    //     params.append("IdUserIS", userId);
-    //     axios.post("", params)
-    //     .then((response) => {
-    //         let validate = JSON.stringify(response);
-    //         if (validate.includes("User|Error")) {
-    //             const messageToShow = response.data.Echo.split(":")[1];
-    //             message.error(messageToShow);
-    //             return;
-    //         }
-    //         else{
-    //             const { MotherBoard } = response.data;
-    //             setMotherBoardDetail(MotherBoard);
-    //             setSenseFrequency(MotherBoard.MotherBoardConfiguration.SenseFrecuency);
-    //             setSensors(MotherBoard.MotherBoardSensors);
-    //         }
-    //     })
-    //     .catch((error) => {
-    //       console.log("Error", error);
-    //     })
-    // };
 
     const handleRangeTemperature = (value) =>{
         setMinTemperature(value[0]);

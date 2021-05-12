@@ -1,8 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import { 
   Table, 
-  Input, 
-  Typography, 
   Row, 
   Button, 
   Tag,
@@ -19,6 +17,7 @@ import axios from "../../../axios";
 
 import NewTeamModal from "../../../components/Modals/NewTravel";
 import TravelDetail from '../../../components/Modals/TravelDetail';
+import { getDateFiltered } from '../../../api/dateService';
 
 const Statuses = {
   STARTED: "started",
@@ -46,15 +45,16 @@ const CurrentTravels = ({user}) =>{
   const [Modal, setModal] = useState(null);
   const [travels, setTravels] = useState([]);
   const [travelSelected, setTravelSelected] = useState(null);
+  const [loading, setLoading] = useState(false);
 
   const Data = (() => travels.map((d, key) => ({ ...d, key })))();
 
   const columns = [
-    {
-      title: 'Nombre',
-      dataIndex: 'name',
-      key: 'name',
-    },
+    // {
+    //   title: 'Nombre',
+    //   dataIndex: 'name',
+    //   key: 'name',
+    // },
     {
       title: 'Estatus',
       dataIndex: 'Status',
@@ -74,11 +74,21 @@ const CurrentTravels = ({user}) =>{
       title: 'Fecha de inicio',
       dataIndex: 'StartTime',
       key: 'startTime',
+      render: (record) => (
+        <span >
+          {getDateFiltered(record)}
+        </span>
+      )
     },
     {
       title: 'Fecha de llegada',
       dataIndex: 'EndTime',
       key: 'endTime',
+      render: (record) => (
+        <span >
+          {record ? getDateFiltered(record) : "En progreso"}
+        </span>
+      )
     },
     {
       title: 'Información',
@@ -118,6 +128,7 @@ const CurrentTravels = ({user}) =>{
   };
 
   const getTravels = () =>{
+    setLoading(true);
     const params = new URLSearchParams();
     params.append("func", "Travel-gut");
     params.append("IdUserIS", user.IdUser);
@@ -136,6 +147,7 @@ const CurrentTravels = ({user}) =>{
     .catch((error) => {
       console.log("Error", error);
     })
+    .finally(()=> setLoading(false));
   };
 
   return  (
@@ -156,6 +168,7 @@ const CurrentTravels = ({user}) =>{
         dataSource={Data} 
         columns={columns} 
         scroll={{ x: 800, y: 400 }}
+        loading={loading}
       />
     </>
 );

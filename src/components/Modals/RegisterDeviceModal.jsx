@@ -1,6 +1,8 @@
 import React, {useState, useEffect} from 'react';
-import { Modal, Input, Button, message, Select, Typography } from "antd";
+import { Input, Button, message, Select, Typography } from "antd";
 import axios from "../../axios";
+
+import Modal from "../../components/Modals/Modal";
 
 const { Option } = Select;
 const { Title } = Typography;
