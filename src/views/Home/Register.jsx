@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import styles from "./home.module.css"
 import { Form, Input, Button, Image, message, Row } from 'antd';
 import { sha256 } from "js-sha256";
@@ -8,6 +8,7 @@ import { MailOutlined, LockOutlined, UserOutlined } from '@ant-design/icons';
 
 const Register = ({onChange, doLogIn}) => {
     const history = useHistory();
+    const [loading, setLoading] = useState(false);
 
     const onFinish = (values) => {
         const arePasswordEquals = ArePasswordEquals(values.password1, values.password2);
@@ -15,6 +16,7 @@ const Register = ({onChange, doLogIn}) => {
             message.error("Contraseñas diferentes");
             return;
         }
+        setLoading(true);
         const params = new URLSearchParams();
         params.append("func", "User-rnu");
         params.append("args", JSON.stringify(
@@ -38,13 +40,17 @@ const Register = ({onChange, doLogIn}) => {
             }
         })
         .catch(console.log("Error 123"))
-      };
-    const onFinishFailed = (errorInfo) => {
-    console.log('Failed:', errorInfo);
+        .finally(()=> setLoading(false));
     };
+
+    const onFinishFailed = (errorInfo) => {
+        console.log('Failed:', errorInfo);
+    };
+
     const ArePasswordEquals = (password1, password2) =>{
         return password1.localeCompare(password2) === 0;
     };
+
     return (
         <div className={styles.Home}>
             <div className ={styles.BgImage}/>
@@ -127,6 +133,7 @@ const Register = ({onChange, doLogIn}) => {
                             type="primary" 
                             htmlType="submit"
                             style={{width:"100%"}}
+                            loading={loading}
                         >
                                 Registrarse
                             </Button>

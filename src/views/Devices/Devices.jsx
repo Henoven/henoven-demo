@@ -61,7 +61,7 @@ const Devices = ({history, user}) =>{
         .catch((error) => {
           console.log("Error", error);
         })
-        setLoading(false);
+        .finally(()=> setLoading(false));
     };
 
     const handleTurnOnOffMotherboard = (isTurnOn, IdMotherBoard) =>{

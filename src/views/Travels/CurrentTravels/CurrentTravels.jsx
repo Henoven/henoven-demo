@@ -147,7 +147,7 @@ const CurrentTravels = ({user}) =>{
     .catch((error) => {
       console.log("Error", error);
     })
-    .finally(()=> setLoading(false));
+    .finally(()=> setLoading(false))
   };
 
   return  (
@@ -165,6 +165,7 @@ const CurrentTravels = ({user}) =>{
             </Tooltip>
       </Row>
       <Table 
+        loading={loading}
         dataSource={Data} 
         columns={columns} 
         scroll={{ x: 800, y: 400 }}

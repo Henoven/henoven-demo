@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import styles from "./home.module.css"
 import { Form, Input, Button, Image, message, Row, } from 'antd';
 import { sha256 } from "js-sha256";
@@ -9,8 +9,10 @@ import { MailOutlined, LockOutlined } from '@ant-design/icons';
 const Login = ({onChange, doLogIn}) => {
 
     const history = useHistory();
+    const [loading, setLoading] = useState(false);
 
     const onFinish = (values) => {
+        setLoading(true);
         const params = new URLSearchParams();
         params.append("func", "User-li");
         params.append("args", JSON.stringify(
@@ -32,6 +34,7 @@ const Login = ({onChange, doLogIn}) => {
             }
         })
         .catch(console.log("Error"))
+        .finally(()=> setLoading(false));
       };
 
     const onFinishFailed = (errorInfo) => {
@@ -80,7 +83,9 @@ const Login = ({onChange, doLogIn}) => {
                             <Button 
                                 type="primary" 
                                 htmlType="submit"
-                                style={{width:"100%"}}>
+                                style={{width:"100%"}}
+                                loading={loading}
+                            >
                                 Iniciar sesión
                             </Button>
                         </Form.Item>

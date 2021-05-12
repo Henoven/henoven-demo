@@ -1,5 +1,9 @@
 import React, { useState, useEffect } from 'react';
+<<<<<<< HEAD
 import { Badge, Button, Col, Divider, Input, message, Row, List, Select, Switch,  Typography, Popconfirm } from "antd";
+=======
+import { Badge, Button, Col, Divider, Input, Modal, message, Row, List, Select, Switch,  Typography, Popconfirm, Spin } from "antd";
+>>>>>>> 668fbb04a1e00c422a196e6e3bccf7a434c27931
 import axios from "../../axios";
 
 import ItemSensor from "../../components/ItemSensor";
@@ -321,124 +325,126 @@ const DetailMotherBoard = ({
                 </Button>,
             ]}
         >
-            {
-                motherBoardDetail &&
-                <>
-                    <Row align="top">
-                        <Col flex={1}>
-                            <Title 
-                                level={5}
-                                style={{marginTop:20}}
-                            >
-                                Apagar/Prender
-                            </Title>
-                            <Switch 
-                                checked={isMotherBoardTurnedOn}
-                                onClick={()=> handleTurnOnOffMotherboard(isMotherBoardTurnedOn)}
-                            />
-                        </Col>
-                        <Col>
-                            <Badge text={motherBoardDetail.Status.Label} status={Status[motherBoardDetail.Status.Value]}/>  
-                        </Col>
+            <Spin spinning={motherBoardDetail ? false : true}>
+                {
+                    motherBoardDetail &&
+                    <>
+                        <Row align="top">
+                            <Col flex={1}>
+                                <Title 
+                                    level={5}
+                                    style={{marginTop:20}}
+                                >
+                                    Apagar/Prender
+                                </Title>
+                                <Switch 
+                                    checked={isMotherBoardTurnedOn}
+                                    onClick={()=> handleTurnOnOffMotherboard(isMotherBoardTurnedOn)}
+                                />
+                            </Col>
+                            <Col>
+                                <Badge text={motherBoardDetail.Status.Label} status={Status[motherBoardDetail.Status.Value]}/>  
+                            </Col>
 
-                    </Row>
-                    <Title 
-                                level={5}
-                                style={{marginTop:20}}
-                            >
-                               Nombre
-                    </Title>
-                    <Input
-                        placeholder="Escriba el nombre del dispositivo" 
-                        value={motherBoardName}
-                        onChange={(e) => setMotherBoardName(e.target.value)}
-                        size="large" 
-                        style={{
-                            marginLeft:0,
-                            marginBottom:10, 
-                            placeholderColor:"black",
-                        }}
-                    />
-                    <Row 
-                        gutter={50}>
-                        <Col>
-                            <Title 
-                                level={5}
-                                style={{marginTop:20}}
-                            >
-                                Tiempo de muestreo
-                            </Title>
+                        </Row>
+                        <Title 
+                                    level={5}
+                                    style={{marginTop:20}}
+                                >
+                                Nombre
+                        </Title>
+                        <Input
+                            placeholder="Escriba el nombre del dispositivo" 
+                            value={motherBoardName}
+                            onChange={(e) => setMotherBoardName(e.target.value)}
+                            size="large" 
+                            style={{
+                                marginLeft:0,
+                                marginBottom:10, 
+                                placeholderColor:"black",
+                            }}
+                        />
+                        <Row 
+                            gutter={50}>
+                            <Col>
+                                <Title 
+                                    level={5}
+                                    style={{marginTop:20}}
+                                >
+                                    Tiempo de muestreo
+                                </Title>
+                                <Select 
+                                    placeholder="Selecciona tiempo de muestreo"
+                                    defaultValue={()=> getFilterValue(motherBoardDetail.MotherBoardConfiguration.SenseFrecuency)}
+                                    onChange={(value)=> setSenseFrequency(value)}>
+                                    {OptionsSample().map((option, index)=>
+                                        <Select.Option 
+                                            key={index} 
+                                            value={option.Value}
+                                        >
+                                            {option.Label}
+                                        </Select.Option>
+                                    )}
+                                </Select>
+                            </Col>
+                        </Row>
+                        <Divider style={{marginTop:10}}/>
+                        <Title 
+                            level={5}
+                            style={{marginTop:20}}
+                        >
+                            Sensores
+                        </Title>
+                        <Row
+                            gutter={[16, 16]}
+                        >
+                            <Col span={16}>
+                                <Input 
+                                    placeholder="Número de serie del sensor"
+                                    onChange={(e) => setSensorSerialNumber(e.target.value)}
+                                />
+                            </Col>
+                            <Col flex={1}>
                             <Select 
-                                placeholder="Selecciona tiempo de muestreo"
-                                defaultValue={()=> getFilterValue(motherBoardDetail.MotherBoardConfiguration.SenseFrecuency)}
-                                onChange={(value)=> setSenseFrequency(value)}>
-                                {OptionsSample().map((option, index)=>
+                                placeholder="Posición"
+                                onChange={(value) => setPositionSensor(value)}
+                            >
+                                {
+                                    PositionOptions.map((option, index) =>
                                     <Select.Option 
                                         key={index} 
                                         value={option.Value}
                                     >
                                         {option.Label}
                                     </Select.Option>
-                                )}
+                                    )
+                                }
                             </Select>
-                        </Col>
-                    </Row>
-                    <Divider style={{marginTop:10}}/>
-                    <Title 
-                        level={5}
-                        style={{marginTop:20}}
-                    >
-                        Sensores
-                    </Title>
-                    <Row
-                        gutter={[16, 16]}
-                    >
-                        <Col span={16}>
-                            <Input 
-                                placeholder="Número de serie del sensor"
-                                onChange={(e) => setSensorSerialNumber(e.target.value)}
-                            />
-                        </Col>
-                        <Col flex={1}>
-                        <Select 
-                            placeholder="Posición"
-                            onChange={(value) => setPositionSensor(value)}
-                        >
-                            {
-                                PositionOptions.map((option, index) =>
-                                <Select.Option 
-                                    key={index} 
-                                    value={option.Value}
-                                >
-                                    {option.Label}
-                                </Select.Option>
-                                )
-                            }
-                        </Select>
-                        </Col>
-                        <Col>
-                            <Button onClick={handleAddSensor}>
-                                Agregar dispositivo
-                            </Button>
-                        </Col>
-                    </Row>
-                    <List
-                        itemLayout="horizontal"
-                        // loading = {isLoading}
-                        dataSource={sensors}
-                        key={(sensor) => sensor.IdSensor}
-                        renderItem={item => (
-                            <List.Item style={{paddingBottom:1}}>
-                                <ItemSensor
-                                    data={item}
-                                    onSave={handleOnSaveSensor}
-                                    onUnlink={handleOnUnlikSensor}
-                                />
-                            </List.Item>
-                            )}
-                    />
-                </>
-            }
+                            </Col>
+                            <Col>
+                                <Button onClick={handleAddSensor}>
+                                    Agregar dispositivo
+                                </Button>
+                            </Col>
+                        </Row>
+                        <List
+                            itemLayout="horizontal"
+                            // loading = {isLoading}
+                            dataSource={sensors}
+                            key={(sensor) => sensor.IdSensor}
+                            renderItem={item => (
+                                <List.Item style={{paddingBottom:1}}>
+                                    <ItemSensor
+                                        data={item}
+                                        onSave={handleOnSaveSensor}
+                                        onUnlink={handleOnUnlikSensor}
+                                    />
+                                </List.Item>
+                                )}
+                        />
+                    </>
+                }
+            </Spin>
         </Modal>
     );
 };

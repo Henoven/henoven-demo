@@ -1,5 +1,5 @@
 import React, {useState, useEffect} from 'react';
-import { Button, message,Typography, Col, Row, Popconfirm, Tooltip, Progress} from "antd";
+import { Modal, Button, message,Typography, Col, Row, Popconfirm, Tooltip, Progress, Spin} from "antd";
 import axios from "../../axios";
 import AppChar from '../AppChar';
 import { IconButton } from '@material-ui/core';
@@ -151,7 +151,7 @@ const TravelDetail = ({
                 </Button>,
             ] : null}
         >
-         <>
+         <Spin spinning={!travelDetail ? true : false}>
             {travelDetail &&
                 <Row gutter={{ xs: 8, sm: 16, md: 24}}>
                     <Col flex={2}>
@@ -273,7 +273,7 @@ const TravelDetail = ({
                     </Col>
                 </Row>
             }
-         </>   
+         </Spin>   
         </Modal>
         );
 }

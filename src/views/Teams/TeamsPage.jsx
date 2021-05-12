@@ -37,7 +37,10 @@ const TeamsPage =({histoy, user})=> {
         .catch((error) => {
           console.log("Error", error);
         })
-        setLoadTeams(false);
+        .finally(()=> {
+            setLoadTeams(false);
+            setIsLoading(false);
+        })
       }, [loadTeams]);
 
     const [ViewSelected, setViewSelected] = useState("teams");
