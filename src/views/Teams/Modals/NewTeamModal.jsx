@@ -1,6 +1,8 @@
 import React, {useState} from 'react';
-import { Modal, Input, Button, message } from "antd";
+import { Input, Button, message } from "antd";
 import axios from "../../../axios";
+
+import Modal from '../../../components/Modals/Modal';
 
 const NewTeamModal = ({ onClose, userId, refreshTeams}) =>{
     

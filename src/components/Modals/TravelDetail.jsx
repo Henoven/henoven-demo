@@ -1,5 +1,5 @@
 import React, {useState, useEffect} from 'react';
-import { Modal, Button, message,Typography, Col, Row, Popconfirm, Tooltip, Progress, Spin} from "antd";
+import { Button, message,Typography, Col, Row, Popconfirm, Tooltip, Progress, Spin} from "antd";
 import axios from "../../axios";
 import AppChar from '../AppChar';
 import { IconButton } from '@material-ui/core';

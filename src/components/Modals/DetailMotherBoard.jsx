@@ -1,9 +1,5 @@
 import React, { useState, useEffect } from 'react';
-<<<<<<< HEAD
-import { Badge, Button, Col, Divider, Input, message, Row, List, Select, Switch,  Typography, Popconfirm } from "antd";
-=======
-import { Badge, Button, Col, Divider, Input, Modal, message, Row, List, Select, Switch,  Typography, Popconfirm, Spin } from "antd";
->>>>>>> 668fbb04a1e00c422a196e6e3bccf7a434c27931
+import { Badge, Button, Col, Divider, Input, message, Row, List, Select, Switch,  Typography, Popconfirm, Spin } from "antd";
 import axios from "../../axios";
 
 import ItemSensor from "../../components/ItemSensor";

@@ -1,8 +1,9 @@
 import React, {useState, useEffect} from 'react';
-import { Modal, Input, Button, Row, Divider, Typography, List, Popconfirm, message} from "antd";
+import {Input, Button, Row, Divider, Typography, List, Popconfirm, message} from "antd";
 import axios from "../../../axios";
 
 import CardUser from '../../../components/Cards/CardUser';
+import Modal from '../../../components/Modals/Modal';
 
 const {Search} = Input;
 const {Title} = Typography;
@@ -172,6 +173,7 @@ const EditTeamModal = ({ onClose, IdUser, IdTeam, refreshTeams}) =>{
             width="60%"
             visible
             onCancel={onClose}
+            title={"Información de equipo: "+ teamName}
             footer={[
                 <Popconfirm 
                     key={0}
@@ -198,8 +200,7 @@ const EditTeamModal = ({ onClose, IdUser, IdTeam, refreshTeams}) =>{
             ]}
         >
             <>
-                <Input 
-                    bordered={false} 
+                <Input  
                     placeholder="Escriba el nombre del equipo" 
                     value={teamName}
                     onChange={(e) => setTeamName(e.target.value)}
