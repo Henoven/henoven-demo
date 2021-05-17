@@ -168,6 +168,7 @@ const DetailSectionModal = ({
                         justify="space-between"
                     >
                        <Input 
+                            value={nameProduct}
                             placeholder="Nombre"
                             style={{ width: 300 }}
                             onChange={(e) => setNameProduct(e.target.value)}

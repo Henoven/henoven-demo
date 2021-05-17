@@ -47,7 +47,7 @@ const CurrentTravels = ({user}) =>{
   const [travelSelected, setTravelSelected] = useState(null);
   const [loading, setLoading] = useState(false);
 
-  const Data = (() => travels.map((d, key) => ({ ...d, key })))();
+  const Data = (() => travels?.map((d, key) => ({ ...d, key })))();
 
   const columns = [
     // {

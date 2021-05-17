@@ -44,7 +44,7 @@ const CardDevice = ({
                 align="middle"
                 justify="space-around">
                     <Col span={4}>
-                        <span style={{marginLeft:25, textAlign:"center"}}>{code}</span>
+                        <span style={{marginLeft:25, textAlign:"center", fontWeight:"bold"}}>{code}</span>
                     </Col>
                     <Col span={4}>
                         <span>{name}</span>

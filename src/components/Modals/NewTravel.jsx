@@ -1,5 +1,5 @@
 import React, { useState, useEffect} from 'react';
-import { Input, Button, message, Select} from "antd";
+import { Input, Button, message, Select, Spin} from "antd";
 import axios from "../../axios";
 import TextArea from 'antd/lib/input/TextArea';
 import TitleComponent from '../TitleComponent';
@@ -15,26 +15,81 @@ const NewTravel = ({
 }) =>{
     
     const [Loading, setLoading] = useState(false);
+    const [loadingSections, setLoadingSections] = useState(false);
+
     const [idTeamSelected, setIdTeamSelected] = useState(null);
+    const [idSection, setIdSection] = useState(null);
     const [idDeviceSelected, setIdDeviceSelected] = useState(null);
     const [startPoint, setStartPoint] = useState(null);
     const [destiny, setDestiny] = useState(null);
     const [products, setProducts] = useState(null);
     const [teams, setTeams] = useState([]);
     const [devices, setDevices] = useState([]);
+    const [sections, setSections] = useState([]);
+    const [productsFromSection, setProductsFromSection] = useState([]);
+    const [productsSelected, setProductsSelected] = useState([]);
+    
 
     useEffect(() => {
         getTeams();
         getDevices();
     },[]);
 
+    useEffect(() => {
+        getSectionsOfTeam();
+    },[idTeamSelected, setIdTeamSelected]);
+    
+    useEffect(() => {
+        getProductsFromSection();
+    },[idSection, setIdSection]);
+
+    const getProductsFromSection = () =>{
+        if(!idSection){
+            setProductsFromSection([]);
+            return;
+        }
+        const newProducts = sections.find((section) => section.IdSection === idSection).products;
+        const nameProducts = newProducts.map((product) => product.ProductName);
+        setProductsFromSection(newProducts);
+        setProductsSelected(nameProducts);
+    };
+
+    const getSectionsOfTeam = () =>{
+        if(!idTeamSelected) return;
+        setLoadingSections(true);
+        const args = JSON.stringify({
+            IdTeam: idTeamSelected,
+        });
+        const params = new URLSearchParams();
+        params.append("func", "Travel-gptl");
+        params.append("IdUserIS", userId);
+        params.append("args", args);
+        axios.post("", params)
+        .then((response) => {
+            const messageFromDB = response.data.Echo !== null ? response.data.Echo : "";
+            if(messageFromDB){
+                const messageToShow =  response.data.Echo.split(":");
+                message.error(messageToShow[1]);
+            }
+            else{
+                setSections(response.data);
+                setProductsSelected([]);
+                setProducts([]);
+            }
+        })
+        .catch((error) => {
+          console.log("Error", error);
+        })
+        .finally(()=> setLoadingSections(false));
+    };
+
     const getTeams = () =>{
+        setLoading(true);
         const params = new URLSearchParams();
         params.append("func", "Team-gutai");
         params.append("IdUserIS", userId);
         axios.post("", params)
         .then((response) => {
-            setLoading(false);
             const messageFromDB = response.data.Echo !== null ? response.data.Echo : "";
             if(messageFromDB){
                 const messageToShow =  response.data.Echo.split(":");
@@ -50,15 +105,16 @@ const NewTravel = ({
         .catch((error) => {
           console.log("Error", error);
         })
+        .finally(() => setLoading(false));
     };
 
     const getDevices = () =>{
+        setLoading(true);
         const params = new URLSearchParams();
         params.append("func", "MB-gumbs");
         params.append("IdUserIS", userId);
         axios.post("", params)
         .then((response) => {
-            setLoading(false);
             const messageFromDB = response.data.Echo !== null ? response.data.Echo : "";
             if(messageFromDB){
                 const messageToShow =  response.data.Echo.split(":");
@@ -74,6 +130,7 @@ const NewTravel = ({
         .catch((error) => {
           console.log("Error", error);
         })
+        .finally(() => setLoading(false));
     };
 
     const handleStartTravel = () =>{
@@ -81,6 +138,7 @@ const NewTravel = ({
             message.error("Faltan campos por llenar");
             return;
         }
+        setLoading(true);
         const args = JSON.stringify({
             IdTeam: idTeamSelected,
             IdMotherBoard: idDeviceSelected,
@@ -96,7 +154,7 @@ const NewTravel = ({
         .then((response) => {
             setLoading(false);
             const messageFromDB = response.data.Echo !== null ? response.data.Echo : "";
-            if(messageFromDB.includes("Error")){
+            if(messageFromDB?.includes("Error")){
                 const messageToShow =  response.data.Echo.split(":");
                 message.error(messageToShow[1]);
             }
@@ -112,12 +170,31 @@ const NewTravel = ({
         .catch((error) => {
           console.log("Error", error);
         })
+        .finally(()=> setLoading(false));
+    };
+
+    const handleIdTeam = (value) =>{
+        setIdTeamSelected(value);
+        setIdSection(null);
     };
 
     const areRequiredValuesFilled = () =>{
-        console.log(idTeamSelected, idDeviceSelected, startPoint, destiny);
         return idTeamSelected !== null && idDeviceSelected !== null && startPoint !== null && destiny !== null;
     };
+
+    const handleIdSectionSelected = (value) =>{
+        setIdSection(value);
+    };
+
+    const handleProductsSelected = (value) =>{
+        setProductsSelected(value);
+        const newProducts = [];
+        for(let productName of value){
+            const newProduct = productsFromSection.find((product) => product.ProductName === productName);
+            newProducts.push(newProduct);
+        }
+        setProducts(newProducts);
+    }
 
     return(
         <Modal
@@ -125,27 +202,31 @@ const NewTravel = ({
             visible
             onCancel={onClose}
             footer={[
-                <Button onClick={onClose}>
+                <Button 
+                    onClick={onClose} 
+                    loading={Loading}
+                >
                     Cancelar
                 </Button>,
-                <Button loading={Loading}
-                type="primary" 
-                onClick={()=> handleStartTravel()}>
+                <Button 
+                    loading={Loading}
+                    type="primary" 
+                    onClick={()=> handleStartTravel()}
+                >
                     Iniciar
                 </Button>,
             ]}
         >   
-            <>
+            <Spin spinning={loadingSections}>
                 <TitleComponent required={true}>
                     Equipos
                 </TitleComponent>
                 <Select
-                    allowClear
+                    // allowClear
                     showSearch
-                    style={{ width: 200 }}
                     placeholder="Seleccionar un equipo"
                     optionFilterProp="children"
-                    onChange={(value) => setIdTeamSelected(value)}
+                    onChange={(value) => handleIdTeam(value)}
                     filterOption={(input, option) =>
                     option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
                     }
@@ -199,14 +280,58 @@ const NewTravel = ({
                     onChange={(e) => setDestiny(e.target.value)}
                 />
                 <TitleComponent >
-                    Productos
+                    Sección de almacén
                 </TitleComponent>
-                <TextArea
-                    rows={5}
-                    placeholder="Ingresar productos"
-                    onChange={(e) => setProducts(e.target.value)}
-                />
-            </>
+                <Select
+                    allowClear
+                    showSearch
+                    value={idSection}
+                    style={{ width: 200 }}
+                    placeholder="Seleccionar sección de almacén"
+                    optionFilterProp="children"
+                    onChange={handleIdSectionSelected}
+                    filterOption={(input, option) =>
+                    option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+                    }
+                >
+                    {
+                        sections.map((section) =>
+                            <Option 
+                                key={section.IdSection}
+                                value={section.IdSection}>
+                                    {section.Name}
+                            </Option>
+                        )
+                    }
+                </Select>
+                <TitleComponent>
+                    Productos (primero elija una sección de almacén)
+                </TitleComponent>
+                <Select
+                    allowClear
+                    showSearch
+                    disabled={!idSection ? true : false}
+                    mode="multiple"
+                    value={productsSelected}
+                    style={{ width: 200 }}
+                    placeholder="Seleccionar productos de sección"
+                    optionFilterProp="children"
+                    onChange={handleProductsSelected}
+                    filterOption={(input, option) =>
+                    option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+                    }
+                >
+                    {
+                        productsFromSection.map((item) =>
+                            <Option 
+                                key={item.IdProduct}
+                                value={item.ProductName}>
+                                    {item.ProductName}
+                            </Option>
+                        )
+                    }
+                </Select>
+            </Spin>
         </Modal>
         );
 }
