@@ -26,7 +26,6 @@ const NotificationsModal = ({
                 message.error(response.Request_Error);
             }
             else{
-                console.log(response);
                 setNotifications(response);
             }
         })
