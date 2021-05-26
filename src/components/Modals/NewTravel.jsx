@@ -1,7 +1,6 @@
 import React, { useState, useEffect} from 'react';
 import { Input, Button, message, Select, Spin} from "antd";
 import axios from "../../axios";
-import TextArea from 'antd/lib/input/TextArea';
 import TitleComponent from '../TitleComponent';
 
 import Modal from "../../components/Modals/Modal";

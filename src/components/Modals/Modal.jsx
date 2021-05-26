@@ -24,7 +24,7 @@ const Title = styled.div`
 
 const Content = styled.div`
   flex: 1;
-//   overflow: auto;
+  overflow: auto;
   padding-top: 0.5rem;
 `;
 

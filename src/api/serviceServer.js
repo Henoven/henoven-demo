@@ -1,4 +1,5 @@
 import axios from "axios";
+import config from '../config.json';
 
 const transformRequest = (data) =>{
     let type = typeof data;
@@ -18,7 +19,7 @@ const transformRequest = (data) =>{
 };
 
 export const ServerInstance = axios.create({
-    baseURL: `https://henovenalfa.000webhostapp.com//Henoven/Tests/Beta/Api/index.php`,
+    baseURL: config.apiEndpoint,
     transformRequest,
 });
 

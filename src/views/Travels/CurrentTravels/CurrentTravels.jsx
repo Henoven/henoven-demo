@@ -5,19 +5,22 @@ import {
   Button, 
   Tag,
   Tooltip,
-  message
+  message,
+  Badge
 } from "antd";
 import { withRouter } from 'react-router-dom';
 import { 
   EditOutlined, 
-  PlusCircleOutlined
+  PlusCircleOutlined,
+  BellOutlined
 } from '@ant-design/icons';
-
+import serviceServer from "../../../api/serviceServer";
 import axios from "../../../axios";
 
 import NewTeamModal from "../../../components/Modals/NewTravel";
 import TravelDetail from '../../../components/Modals/TravelDetail';
 import { getDateFiltered } from '../../../api/dateService';
+import NotificationsModal from '../../../components/Modals/NotificationsModal';
 
 const Statuses = {
   STARTED: "started",
@@ -46,6 +49,7 @@ const CurrentTravels = ({user}) =>{
   const [travels, setTravels] = useState([]);
   const [travelSelected, setTravelSelected] = useState(null);
   const [loading, setLoading] = useState(false);
+  const [lengthPendingNotifications, setLengthPendingNotifications] = useState(0);
 
   const Data = (() => travels?.map((d, key) => ({ ...d, key })))();
 
@@ -104,6 +108,17 @@ const CurrentTravels = ({user}) =>{
     },
   ];
 
+  const handleOpenTravelDetail = (travel) =>{
+    setModal("travelDetail");
+    setTravelSelected(travel);
+  };
+
+  const handleOpenTravelDetailFromNotification = (travel) =>{
+    setModal("travelDetail");
+    setTravelSelected(travel);
+    deleteNotification(travel.IdNotification);
+  };
+
   const Modals = {
     "newTravelModal": <NewTeamModal 
                         onClose={()=>setModal(null)}
@@ -115,17 +130,37 @@ const CurrentTravels = ({user}) =>{
                         userId={user.IdUser}  
                         travel={travelSelected}
                         setTravels={setTravels}
-                    />
+                    />,
+    "notificationsModal": <NotificationsModal
+                            onClose={()=> setModal(null)}  
+                            userId={user.IdUser}
+                            onOpenDetailTravel={(value) => handleOpenTravelDetailFromNotification(value)}
+                          />
   };
 
   useEffect(() => {
     getTravels();
+    getNotificationsLength();
   }, []);
 
-  const handleOpenTravelDetail = (travel) =>{
-    setModal("travelDetail");
-    setTravelSelected(travel)
-  };
+  const deleteNotification = (IdNotification) =>{
+    serviceServer("Team-dun", user.IdUser, { IdNotification }).then((response) =>{
+      if(response.Request_Error){
+        message.error(response.Request_Error);
+      }
+    });
+  }
+
+  const getNotificationsLength = () =>{
+    serviceServer("Team-gunn", user.IdUser).then((response) =>{
+      if(response.Request_Error){
+        message.error(response.Request_Error);
+      }
+      else{
+        setLengthPendingNotifications(response);
+      }
+    });
+  }
 
   const getTravels = () =>{
     setLoading(true);
@@ -157,11 +192,18 @@ const CurrentTravels = ({user}) =>{
             align="middle" 
             justify="end" 
             style={{marginTop:10, marginBottom:10}}>
+            <Badge count={lengthPendingNotifications} style={{marginRight:20}}>
+              <Button 
+                shape="circle" 
+                icon={<BellOutlined style={{color:"orange", fontSize:25}}/>}
+                onClick={()=> setModal("notificationsModal")} 
+                style={{marginRight:20}}/>
+            </Badge>
             <Tooltip title="Comenzar un nuevo viaje">
-                <Button 
-                    shape="circle" 
-                    icon={<PlusCircleOutlined style={{color:"#3498db", fontSize:25}}/>}
-                    onClick={()=> setModal("newTravelModal")} />
+              <Button 
+                shape="circle" 
+                icon={<PlusCircleOutlined style={{color:"#3498db", fontSize:25}}/>}
+                onClick={()=> setModal("newTravelModal")} />
             </Tooltip>
       </Row>
       <Table 

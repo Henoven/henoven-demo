@@ -250,7 +250,7 @@ const TravelDetail = ({
         if(!travel){return;}
         const params = new URLSearchParams();
         const args = JSON.stringify({
-            IdTravel:travel.IdTravel
+            IdTravel: travel.IdTravel
         });
         params.append("func", "Travel-gtd");
         params.append("IdUserIS", userId);
