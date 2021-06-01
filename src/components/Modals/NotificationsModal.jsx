@@ -33,6 +33,21 @@ const NotificationsModal = ({
         .finally(()=> setLoading(false));
     };
 
+    const handleOnDeleteNotification = (IdNotification) =>{
+        setLoading(true);
+        const args = { IdNotification };
+        serviceServer("Team-dun", userId, args).then((response)=>{
+            if(response.Request_Error){
+                message.error(response.Request_Error);
+            }
+            else{
+                setNotifications(response);
+            }
+        })
+        .catch((error) => message.error(error))
+        .finally(()=> setLoading(false));
+    };
+
     return(
         <Modal
             title="Notificaciones"
@@ -50,6 +65,7 @@ const NotificationsModal = ({
                         title={item.Title}
                         body={item.Message}
                         date={getDateFiltered(item.Time)}
+                        onDelete={()=> handleOnDeleteNotification(item.IdNotification)}
                         onClick={()=> onOpenDetailTravel({
                             IdTravel: item.IdTravel, 
                             IdNotification: item.IdNotification
