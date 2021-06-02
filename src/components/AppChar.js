@@ -88,8 +88,8 @@ const AppChar = ({
           }
         },
         yaxis: [{
-          min: -offSet,
-          max:parseFloat(maxTemp)+offSet,
+          min: -40,
+          max:100,
           decimalsInFloat:2,
           title: {
             text: 'Temperatura',

@@ -55,11 +55,16 @@ const CurrentTravels = ({user}) =>{
 
  
   const columns = [
-    // {
-    //   title: 'Nombre',
-    //   dataIndex: 'name',
-    //   key: 'name',
-    // },
+    {
+      title: 'Lugar de Origen',
+      dataIndex: 'StartPoint',
+      key: 'startPoint',
+    },
+    {
+      title: 'Destino',
+      dataIndex: 'Destiny',
+      key: 'destiny',
+    },
     {
       title: <TitleTable>Fecha de Inicio</TitleTable>,
       dataIndex: 'StartTime',
@@ -124,7 +129,7 @@ const CurrentTravels = ({user}) =>{
 
   const Modals = {
     "newTravelModal": <NewTeamModal 
-                        onClose={()=>setModal(null)}
+                        onClose={()=> setModal(null)}
                         userId={user.IdUser}  
                         setTravels={setTravels}
                       />,
@@ -135,7 +140,10 @@ const CurrentTravels = ({user}) =>{
                         setTravels={setTravels}
                     />,
     "notificationsModal": <NotificationsModal
-                            onClose={()=> setModal(null)}  
+                            onClose={()=> {
+                              setModal(null);
+                              setLengthPendingNotifications(0);
+                            }}  
                             userId={user.IdUser}
                             onOpenDetailTravel={(value) => handleOpenTravelDetailFromNotification(value)}
                           />

@@ -11,7 +11,7 @@ const StyledModal = styled(AntdModal)`
         color:white;
     }
     padding: 0;
-    border-radius: 10px;
+    border-radius: 5px;
     overflow: hidden;
 `;
 

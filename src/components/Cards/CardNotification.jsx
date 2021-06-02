@@ -27,7 +27,7 @@ const CardNotification = ({
             <Row align="middle">
                 <Title level={5} style={{flex:1}}>{title}</Title>
                 <div style={{marginRight:10}}>{date}</div>
-                <Badge status={!seen ? "default" : "processing"}/>
+                <Badge status={seen ? "default" : "processing"}/>
                 <Tooltip title="Eliminar notificación">
                     <CloseOutlined onClick={onDelete}/>
                 </Tooltip>

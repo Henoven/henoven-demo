@@ -361,11 +361,11 @@ const TravelDetail = ({
     return(
         <Modal
             width="80%"
-            title={`Información de viaje: ${travel?.TravelExecution}`}
+            title={`Información de viaje: ${travelDetail?.StartPoint}-${travelDetail?.Destiny} `}
             visible
             overflow="hidden"
             onCancel={onClose}
-            footer={ !["finished"].includes(travel?.Status) ? [
+            footer={ !["finished"].includes(travelDetail?.Status) ? [
                 <Popconfirm 
                     key={0}
                     placement="topLeft"
@@ -389,13 +389,13 @@ const TravelDetail = ({
         >
             <Row  style={{marginBottom:10}}>
                 <Row  style={{flex:1}} justify="start">
-                    <Tag color={StatusColor[travel?.Status]}>{travel?.Status}</Tag>
+                    <Tag color={StatusColor[travelDetail?.Status]}>{travelDetail?.Status}</Tag>
                 </Row>
                 <Button  
                     type={lastMeasurementSelected ? "primary" : "default"}
                     onClick={()=> setLastMeasurementSelected(true)}
                 >
-                    Ultimas mediciones
+                    Últimas mediciones
                 </Button>
                 <Button  
                     type={!lastMeasurementSelected ? "primary" : "default"}

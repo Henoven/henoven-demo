@@ -65,6 +65,7 @@ const NotificationsModal = ({
                         title={item.Title}
                         body={item.Message}
                         date={getDateFiltered(item.Time)}
+                        seen={item.Seen}
                         onDelete={()=> handleOnDeleteNotification(item.IdNotification)}
                         onClick={()=> onOpenDetailTravel({
                             IdTravel: item.IdTravel, 
