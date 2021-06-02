@@ -24,11 +24,11 @@ const Title = styled.div`
 
 const Content = styled.div`
   flex: 1;
-  overflow: auto;
   padding-top: 0.5rem;
+  ${(props) => props.$Overflow};
 `;
 
-const Modal = ({ children, title, bodyStyle = {}, ...props }) => {
+const Modal = ({ children, title, bodyStyle = {}, overflow, ...props }) => {
   const { onCancel = NOOP } = props;
   return (
     <StyledModal
@@ -47,7 +47,7 @@ const Modal = ({ children, title, bodyStyle = {}, ...props }) => {
       }}
       {...props}
     >
-      <Content>{children}</Content>
+      <Content $Overflow={`overflow: ${overflow ? overflow : "auto"};`}>{children}</Content>
     </StyledModal>
   );
 };

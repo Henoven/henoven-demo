@@ -36,7 +36,7 @@ const Register = ({onChange, doLogIn}) => {
             else{
                 message.success("Registro exitoso");
                 doLogIn({User: response.data});
-                history.push("/teams");
+                history.push("/travels");
             }
         })
         .catch(console.log("Error 123"))

@@ -23,25 +23,17 @@ import { getDateFiltered } from '../../../api/dateService';
 import NotificationsModal from '../../../components/Modals/NotificationsModal';
 
 const Statuses = {
-  STARTED: "started",
-  STUCK: "stuck",
-  COMPLETED: "completed",
-  CANCELED: "canceled",
-  NEW: "new",
-  WAITING: "waiting",
-  ON_PROGRESS:"on progress"
+  ON_PROGRESS:"on progress",
+  FINISHED: "finished",
 };
 
 const StatusColor = {
-  [Statuses.STARTED]: "cyan",
-  [Statuses.STUCK]: "red",
-  [Statuses.COMPLETED]: "green",
-  [Statuses.CANCELED]: "orange",
-  [Statuses.NEW]: "gray",
-  [Statuses.WAITING]: "warning",
+  [Statuses.ON_PROGRESS]: "cyan",
+  [Statuses.FINISHED]:"green",
 };
   
 
+const MINUTE_MS = 60000;
 
 const CurrentTravels = ({user}) =>{
 
@@ -138,15 +130,29 @@ const CurrentTravels = ({user}) =>{
                           />
   };
 
-  useEffect(() => {
+  useEffect(()=> {
     getTravels();
     getNotificationsLength();
+  }, [])
+  useEffect(() => {
+    const interval = setInterval(() => {
+      getTravels();
+      getNotificationsLength();
+    }, MINUTE_MS);
+
+    return () => clearInterval(interval); // This represents the unmount function, in which you need to clear your interval to prevent memory leaks.
   }, []);
 
   const deleteNotification = (IdNotification) =>{
     serviceServer("Team-dun", user.IdUser, { IdNotification }).then((response) =>{
       if(response.Request_Error){
         message.error(response.Request_Error);
+      }
+      else{
+        if(response?.Echo){
+          message.error(response.Echo);
+          return;
+        }
       }
     });
   }
@@ -157,6 +163,10 @@ const CurrentTravels = ({user}) =>{
         message.error(response.Request_Error);
       }
       else{
+        if(response?.Echo){
+          message.error(response.Echo);
+          return;
+        }
         setLengthPendingNotifications(response);
       }
     });
@@ -175,8 +185,7 @@ const CurrentTravels = ({user}) =>{
             message.error(messageToShow[1]);
         }
         else{
-          const { Travels } = response.data;
-          setTravels(Travels)
+          setTravels(response.data);
         }
     })
     .catch((error) => {

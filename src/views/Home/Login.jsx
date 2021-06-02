@@ -30,7 +30,7 @@ const Login = ({onChange, doLogIn}) => {
             else{
                 message.success("Inicio de sesión");
                 doLogIn({User: response.data});
-                history.push("/teams");
+                history.push("/travels");
             }
         })
         .catch(console.log("Error"))

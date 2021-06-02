@@ -13,7 +13,7 @@ import {getDateFiltered} from "../../api/dateService";
 
 const { Title } = Typography;
 const containerStyle = {
-width: '500px',
+width: '600px',
 height: '400px'
 };
 
@@ -32,13 +32,12 @@ const CurrentDataInfoFromTravel = ({
             window.open(location);
         }
     };
-    console.log("position", position);
 
     return(
         <>
             {travelDetail &&
                 <Row gutter={{ xs: 8, sm: 16, md: 24}}>
-                    <Col flex={2}>
+                    <Col flex={0.7}>
                         <Title level={5} style={{color:"#3498db"}}>
                             Fecha de inicio
                         </Title>
@@ -142,7 +141,10 @@ const CurrentDataInfoFromTravel = ({
                         <Row justify="end" >
                             <GoogleMap
                                 mapContainerStyle={containerStyle}
-                                center={position}
+                                center={{
+                                    lat:20.668,
+                                    lng:-103.399
+                                }}
                                 zoom={20}
                                 onLoad={onLoad}
                                 onUnmount={onUnmount}
@@ -163,8 +165,13 @@ const CurrentDataInfoFromTravel = ({
 };
 
 const StochasticDataFromTravel = ({
-    travelData
+    travelData,
+    travelDetail
 }) =>{
+
+    useEffect(()=>{
+        console.log(travelDetail);
+    }, [travelData])
 
     const styles = {
         fontFamily: "sans-serif",
@@ -190,6 +197,8 @@ const StochasticDataFromTravel = ({
                     <div style={styles}>
                             <AppChar
                                 travelData={travelData}
+                                minTemp={travelDetail.TravelLimits?.MinTemperatureLimit}
+                                maxTemp={travelDetail.TravelLimits?.MaxTemperatureLimit}
                             />
                     </div>
                 </Col>
@@ -204,6 +213,10 @@ const StochasticDataFromTravel = ({
                         status="active"
                         strokeColor="#3c5c9e"
                     />
+                    <Title level={5} style={{color:"#3498db"}}>
+                        Rango de temperatura aceptable
+                    </Title>
+                    <div>{`${travelDetail.TravelLimits?.MinTemperatureLimit?.slice(0, -13)}°C a ${travelDetail.TravelLimits?.MaxTemperatureLimit?.slice(0, -13)}°C`}</div>
                 </Col>
             </Row>
             }
@@ -274,15 +287,10 @@ const TravelDetail = ({
         console.log("Error", error);
         })
     };
-
-    // function round(value, decimals) {
-    //     return Number(Math.round(value+'e'+decimals)+'e-'+decimals);
-    // }
     
     const getPosition = (location) =>{
         if(!location) return;
         const latlong = location?.split(",");
-        console.log("latlong", location);
         const coords = {
             lat: parseFloat(latlong[0].slice(0,-4)),
             lng: parseFloat(latlong[1].slice(0,-4)),
@@ -310,7 +318,7 @@ const TravelDetail = ({
     const handleCancelTravel = () =>{
         const params = new URLSearchParams();
         const args = JSON.stringify({
-            IdTravel:travel.IdTravel
+            IdTravel: travel.IdTravel
         });
         params.append("func", "Travel-ctt");
         params.append("IdUserIS", userId);
@@ -318,13 +326,13 @@ const TravelDetail = ({
         axios.post("", params)
         .then((response) => {
             const messageFromDB = response.data.Echo !== null ? response.data.Echo : "";
-            if(messageFromDB){
+            if(messageFromDB?.split(":").includes("Error")){
                 const messageToShow =  response.data.Echo.split(":");
                 message.error(messageToShow[1]);
             }
             else{
-                const { Travels } = response.data;
-                setTravels(Travels);
+                const { Update } = response.data;
+                setTravels(Update);
                 onClose();
             }
         })
@@ -338,8 +346,9 @@ const TravelDetail = ({
             width="80%"
             title={`Información de viaje: ${travel?.TravelExecution}`}
             visible
+            overflow="hidden"
             onCancel={onClose}
-            footer={ travel?.Status !== "cancell" ? [
+            footer={ !["finished"].includes(travel?.Status) ? [
                 <Popconfirm 
                     key={0}
                     placement="topLeft"
@@ -388,6 +397,7 @@ const TravelDetail = ({
                 <>
                 <StochasticDataFromTravel
                     travelData={travelData}
+                    travelDetail={travelDetail}
                 />
             </>
 

@@ -50,6 +50,7 @@ const NewTravel = ({
         const newProducts = sections.find((section) => section.IdSection === idSection).products;
         const nameProducts = newProducts.map((product) => product.ProductName);
         setProductsFromSection(newProducts);
+        setProducts(newProducts);
         setProductsSelected(nameProducts);
     };
 
@@ -158,9 +159,9 @@ const NewTravel = ({
                 message.error(messageToShow[1]);
             }
             else{
-                const { Travels, Echo } = response.data;
+                const { Update, Echo } = response.data;
                 if(response.data) {
-                    setTravels(Travels);
+                    setTravels(Update);
                     message.success(Echo);
                     onClose();
                 }

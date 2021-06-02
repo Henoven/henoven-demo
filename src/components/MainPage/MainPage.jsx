@@ -1,5 +1,5 @@
-import React, {useState} from 'react';
-import { Layout, Menu, Image, Button } from 'antd';
+import React, {useEffect, useState} from 'react';
+import { Layout, Menu, Image, Row } from 'antd';
 import styles from "./mainPage.module.css";
 import { useHistory } from 'react-router-dom';
 import {
@@ -13,31 +13,46 @@ import {
   } from '@ant-design/icons';
 
 import { doLogOut } from "../../redux/actions/sesion";
+import Title from 'antd/lib/typography/Title';
 
 const {SubMenu} = Menu;
 
 const { Header, Content, Footer, Sider } = Layout;
 
 const MainPage = ({children}) =>{
-    const menu = [
-        {name: "mis viajes", route: "travels", iconComponent:"global_outlined"},
-        {name: "equipos", route: "teams", iconComponent:"team_outlined"},
-        {name: "dispositivos", route: "devices", iconComponent:"mobile_outlined"},
-        {name: "almacen", route: "storage", iconComponent:"shop-outlined"},
-    ];
     const history = useHistory();
     const [Collapsed, setCollapsed] = useState(false);
+    const [nameHeader, setNameHeader] = useState(null);
+    const [route, setRoute] = useState(null);
+
+    const menu = [
+      {name: "mis viajes", route: "travels", iconComponent:"global_outlined"},
+      {name: "equipos", route: "teams", iconComponent:"team_outlined"},
+      {name: "dispositivos", route: "devices", iconComponent:"mobile_outlined"},
+      {name: "almacen", route: "storage", iconComponent:"shop-outlined"},
+    ];
+
+    useEffect(()=>{
+      const route = history?.location.pathname.slice(1);
+      const newName = menu.find((item)=> item.route === route).name;
+      setNameHeader(capitalizeFirstLetter(newName));
+    }, [route]);
+    
+    
     const handleOnNavigate = (link) => {
-      console.log(link);
+      setRoute(link);
       history.push(`/${link}`);
     };
+
     function handleLogout(){
       doLogOut();
       handleOnNavigate("");
     }
+
     function capitalizeFirstLetter(string) {
       return string.charAt(0).toUpperCase() + string.slice(1);
     }
+
     function getIconComponent(icon){
       switch(icon){
         case "global_outlined":
@@ -95,12 +110,13 @@ const MainPage = ({children}) =>{
             <SubMenu 
               title="Ajustes"
               icon={getIconComponent("setting_outlined")}>
-              <Menu.Item
+                {/* When settings needed uncomment this lines */}
+              {/* <Menu.Item 
                 onClick={()=> handleOnNavigate("settings")}
                 icon={getIconComponent("user-outlined")}>
                 Cuenta
               </Menu.Item>
-              <Menu.Divider/>
+              <Menu.Divider/> */}
               <Menu.Item
                 icon={getIconComponent("import-outlined")}
                 onClick={()=> handleLogout()}>
@@ -110,7 +126,11 @@ const MainPage = ({children}) =>{
           </Menu>
         </Sider>
         <Layout className={styles.contentLayout}>
-          <Header style={{ padding: 0 }} />
+          <Header style={{ padding: 0 }} >
+            <Row justify="end" style={{padding:20}}>
+              <Title level={3} style={{color:"white"}}>{nameHeader}</Title>
+            </Row>
+          </Header>
           <Content style={{ margin: '0 16px' }}>
               <div>{children}</div>
           </Content>

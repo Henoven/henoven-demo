@@ -2,70 +2,80 @@ import React, { useEffect, useState } from 'react';
 import Chart from "react-apexcharts";
 
 const AppChar = ({
-  travelData
+  travelData,
+  minTemp,
+  maxTemp
 }) =>{
 
   const [options, setOptions]= useState(null);
   const [series, setSeries] = useState(null);
+  const offSet= 10;
 
     useEffect(()=> {
       setOptions({
         chart: {
-            height: 350,
-            type: 'line',
-          },
-          stroke: {
-            width: [8, 8, 8, 1],
-            curve: 'smooth'
-          },
-          colors:["#ff0000", "#2173de", "#00e600"],
-          xaxis: {
-            type: 'datetime',
-            categories: travelData?.Time.Data,
-            tickAmount: 10,
-            labels: {
-              formatter: function(value, timestamp, opts) {
-                return opts.dateFormatter(new Date(timestamp), 'dd/MMM hh:mm')
-              }
+          height: 350,
+          type: 'line',
+        },
+        annotations: {
+          yaxis: [ {
+            y: parseFloat(minTemp),
+            y2: parseFloat(maxTemp),
+            borderColor: '#000',
+            fillColor: '#a0a0a0',
+            opacity: 0.2,
+            label: {
+              borderColor: '#333',
+              style: {
+                fontSize: '14px',
+                fontType: "bold",
+                color: 'white',
+                background: '#404040',
+                margin:10
+              },
+              text: 'Temperatura aceptable',
             }
-          },
-          title: {
-            text: 'Temperatura de sensores',
-            align: 'left',
-            style: {
-              fontSize: "16px",
-              color: '#666'
+          }],
+        },
+        stroke: {
+          width: [8, 8, 8],
+          curve: 'smooth',
+          dashArray: [0, 0, 0],
+        },
+        colors:["#ff0000", "#2173de", "#00e600"],
+        xaxis: {
+          type: 'datetime',
+          categories: travelData?.Time.Data,
+          tickAmount: 10,
+          labels: {
+            formatter: function(value, timestamp, opts) {
+              return opts.dateFormatter(new Date(timestamp), 'dd/MMM hh:mm')
             }
-          },
-          // fill: {
-          //   type: 'gradient',
-          //   gradient: {
-          //     shade: 'dark',
-          //     gradientToColors: [ '#FDD835', '#FDD835', '#FDD835', '#82a8ff'],
-          //     shadeIntensity: 1,
-          //     type: 'vertical',
-          //     opacityFrom: 1,
-          //     opacityTo: 1,
-          //     stops: [0, 500, 500, 500]
-          //   },
-          // },
-          markers: {
+          }
+        },
+        title: {
+          text: 'Temperatura de sensores',
+          align: 'left',
+          style: {
+            fontSize: "16px",
+            color: '#666'
+          }
+        },
+        markers: {
+          size: 1,
+          colors: ["#FDD835", "#FDD835", "#FDD835"],
+          strokeColors: "#FDD835",
+          strokeWidth: 2,
+          hover: {
             size: 1,
-            colors: ["#FDD835", "#FDD835", "#FDD835"],
-            strokeColors: "#FDD835",
-            strokeWidth: 2,
-            hover: {
-              size: 1,
-            }
+          }
+        },
+        yaxis: [{
+          decimalsInFloat:2,
+          title: {
+            text: 'Temperatura',
           },
-          yaxis: [{
-            // min: -10,
-            // max: 40,
-            decimalsInFloat:2,
-            title: {
-              text: 'Temperatura',
-            },
-          },
+        },
         ]});
       setSeries([
           {

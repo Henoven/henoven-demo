@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import { Row, Col, Button, message, Typography } from 'antd';
-import { PlusCircleOutlined, ContainerOutlined} from '@ant-design/icons';
+import { Row, Col, Button, message, Typography, Spin } from 'antd';
+import { PlusCircleOutlined } from '@ant-design/icons';
 
 import axios from "../../axios";
 
@@ -11,7 +11,6 @@ import DetailSectionModal from '../../components/Modals/DetailSectionModal';
 const { Title } = Typography;
 
 const StorageScreen = ({
-    history,
     user
 }) =>{
     const [loading, setLoading] = useState(false);
@@ -135,7 +134,7 @@ const StorageScreen = ({
     };
 
     return (
-        <>
+        <Spin spinning={loading}>
             {Modals[Modal]}
             <Col>
                 {warehouses &&
@@ -173,7 +172,7 @@ const StorageScreen = ({
                     ))
                 }
             </Col>
-        </>
+        </Spin>
     );
 };
 
