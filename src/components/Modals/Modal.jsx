@@ -29,7 +29,7 @@ const Content = styled.div`
 `;
 
 const Modal = ({ children, title, bodyStyle = {}, overflow, ...props }) => {
-  const { onCancel = NOOP } = props;
+  // const { onCancel = NOOP } = props;
   return (
     <StyledModal
       visible

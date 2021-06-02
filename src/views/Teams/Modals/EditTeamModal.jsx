@@ -10,11 +10,11 @@ const {Title} = Typography;
 
 const EditTeamModal = ({ onClose, IdUser, IdTeam, refreshTeams}) =>{
     
-    const [Loading, setLoading] = useState(false);
+    const [Loading] = useState(false);
     const [Team, setTeam] = useState({});
     const [teamName, setTeamName] = useState();
     const [newTeammate, setNewTeammate] = useState();
-    const [isLoading, setIsLoading] = useState(false);
+    const [isLoading] = useState(false);
     const [users, setUsers] = useState([]);
 
     useEffect(() => {

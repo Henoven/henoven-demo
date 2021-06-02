@@ -164,6 +164,8 @@ const StorageScreen = ({
                                             onSave={handleOnSaveName}
                                             onDelete={handleOnDelete}
                                             onConfigSection={() => handleOnConfigSection(section)}
+                                            maxTemperature={parseFloat(section.MaxTemperatureAverage).toFixed(2)}
+                                            minTemperature={parseFloat(section.MinTemperatureAverage).toFixed(2)}
                                         />
                                     </Col>
                                 ))}

@@ -77,8 +77,8 @@ const CardSection = ({
             }
             bordered={false}
             actions={[
-                    <SettingOutlined key="setting" onClick={onConfigSection}/>,
-                save &&<SaveOutlined key="edit" style={{color:"blue"}} onClick={handleOnSave}/>,
+                <SettingOutlined key="setting" onClick={onConfigSection}/>,
+                save &&<SaveOutlined key="edit" style={{color:"#3498db"}} onClick={handleOnSave}/>,
                 <Popconfirm
                     placement="top"
                     title="¿Quieres eliminar esta sección de almacén?"
@@ -107,7 +107,7 @@ const CardSection = ({
                         </ListItem>
                         <ListItem>
                             <ListItemAvatar >
-                                    <Avatar style={{backgroundColor:"blue"}}>
+                                    <Avatar style={{backgroundColor:"#173b81"}}>
                                         <AcUnitOutlined />
                                     </Avatar>
                             </ListItemAvatar>
@@ -115,7 +115,7 @@ const CardSection = ({
                         </ListItem>
                         <ListItem button onClick={handleClick} >
                             <ListItemAvatar >
-                                <Avatar style={{backgroundColor:"orange"}}>
+                                <Avatar style={{backgroundColor:"#Ffab00"}}>
                                     <StorefrontOutlined />
                                 </Avatar>
                             </ListItemAvatar>

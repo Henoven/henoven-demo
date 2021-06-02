@@ -56,7 +56,15 @@ const Register = ({onChange, doLogIn}) => {
             <div className ={styles.BgImage}/>
             <div className={styles.HomeCard}>
                 <div className ={styles.HomeCardContent}>
-                    <Image src = "http://henovenalfa.000webhostapp.com/resources/logo_henoven.png" style={{marginBottom: "15px"}} preview = {false}/>
+                    <Row justify="center">  
+                        <Image 
+                            src = "http://henovenalfa.000webhostapp.com/resources/logo_henoven.png" 
+                            preview = {false} 
+                            style={{marginBottom: "15px"}}
+                            height={"50%"}
+                            width={"80%"}
+                        />
+                    </Row>
                     <Form
                         name="basic"
                         initialValues={{

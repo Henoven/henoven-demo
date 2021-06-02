@@ -1,9 +1,8 @@
 import React, { useState } from 'react';
-import {Row, Col, Button, Tooltip, Popconfirm, Checkbox} from "antd";
+import {Row, Button, Tooltip, Popconfirm, Checkbox} from "antd";
 import { PlusOutlined, DeleteOutlined} from '@ant-design/icons';
-import styles from "./cardTeam.module.css"
 
-const CardUser = ({title, onChange, onDeleteTeammate, user, canUserSeeDetailTravel}) =>{
+const CardUser = ({title, onDeleteTeammate, user}) =>{
     
     const [collapse, setCollapse] = useState();
     const optionsWithDisabled = [

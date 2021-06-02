@@ -294,6 +294,7 @@ const DetailMotherBoard = ({
             width="60%"
             title="Configurar dispositivo"
             visible
+            overflow="hidden"
             onCancel={onClose}
             footer={[
                 <Popconfirm 
@@ -331,7 +332,7 @@ const DetailMotherBoard = ({
                                     level={5}
                                     style={{marginTop:20}}
                                 >
-                                    Apagar/Prender
+                                    Off/On
                                 </Title>
                                 <Switch 
                                     checked={isMotherBoardTurnedOn}

@@ -1,5 +1,5 @@
 import React, {useState, useEffect, useCallback} from 'react';
-import { Button, message,Typography, Col, Row, Popconfirm, Tooltip, Progress, Spin, Divider} from "antd";
+import { Button, message,Typography, Col, Row, Popconfirm, Tooltip, Progress, Divider, Tag} from "antd";
 import axios from "../../axios";
 import AppChar from '../AppChar';
 import { IconButton } from '@material-ui/core';
@@ -12,10 +12,23 @@ import {KeyGeocoding} from "../../constants";
 import {getDateFiltered} from "../../api/dateService";
 
 const { Title } = Typography;
+
 const containerStyle = {
 width: '600px',
 height: '400px'
 };
+
+
+const Statuses = {
+    ON_PROGRESS:"on progress",
+    FINISHED: "finished",
+};
+
+const StatusColor = {
+    [Statuses.ON_PROGRESS]: "cyan",
+    [Statuses.FINISHED]:"green",
+};
+    
 
 const CurrentDataInfoFromTravel = ({
     travelDetail,
@@ -216,7 +229,11 @@ const StochasticDataFromTravel = ({
                     <Title level={5} style={{color:"#3498db"}}>
                         Rango de temperatura aceptable
                     </Title>
-                    <div>{`${travelDetail.TravelLimits?.MinTemperatureLimit?.slice(0, -13)}°C a ${travelDetail.TravelLimits?.MaxTemperatureLimit?.slice(0, -13)}°C`}</div>
+                    {travelDetail.TravelLimits &&
+                        <div>
+                            {`${parseFloat(travelDetail.TravelLimits?.MinTemperatureLimit).toFixed(2)}°C a ${parseFloat(travelDetail.TravelLimits?.MaxTemperatureLimit).toFixed(2)}°C`}
+                        </div>
+                    }
                 </Col>
             </Row>
             }
@@ -370,7 +387,10 @@ const TravelDetail = ({
                 </Button>,
             ] : null}
         >
-            <Row justify="end" style={{margin:10}}>
+            <Row  style={{marginBottom:10}}>
+                <Row  style={{flex:1}} justify="start">
+                    <Tag color={StatusColor[travel?.Status]}>{travel?.Status}</Tag>
+                </Row>
                 <Button  
                     type={lastMeasurementSelected ? "primary" : "default"}
                     onClick={()=> setLastMeasurementSelected(true)}

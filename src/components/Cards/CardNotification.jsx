@@ -5,6 +5,7 @@ import Title from 'antd/lib/typography/Title';
 import { 
     CloseOutlined
   } from '@ant-design/icons';
+import { Tooltip } from '@material-ui/core';
 
 const Content = styled.div`
     border-radius: 10px;
@@ -27,11 +28,14 @@ const CardNotification = ({
                 <Title level={5} style={{flex:1}}>{title}</Title>
                 <div style={{marginRight:10}}>{date}</div>
                 <Badge status={!seen ? "default" : "processing"}/>
-                <CloseOutlined onClick={onDelete}/>
+                <Tooltip title="Eliminar notificación">
+                    <CloseOutlined onClick={onDelete}/>
+                </Tooltip>
             </Row>
             <div>{body}</div>
             <Row justify="end">
-                <Button type="primary" ghost
+                <Button 
+                    type="primary" ghost
                     onClick={onClick}
                 >
                     Ver

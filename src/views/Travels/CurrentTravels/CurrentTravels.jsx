@@ -31,7 +31,15 @@ const StatusColor = {
   [Statuses.ON_PROGRESS]: "cyan",
   [Statuses.FINISHED]:"green",
 };
-  
+
+const TitleTable = ({children, textAlign}) =>{
+  return(
+    <div style={{fontWeight:"bold", textAlign}}>
+      {children}
+    </div>
+  );
+};
+
 
 const MINUTE_MS = 60000;
 
@@ -45,6 +53,7 @@ const CurrentTravels = ({user}) =>{
 
   const Data = (() => travels?.map((d, key) => ({ ...d, key })))();
 
+ 
   const columns = [
     // {
     //   title: 'Nombre',
@@ -52,22 +61,7 @@ const CurrentTravels = ({user}) =>{
     //   key: 'name',
     // },
     {
-      title: 'Estatus',
-      dataIndex: 'Status',
-      key: 'status',
-      render: (record) => (
-        <Tag color={StatusColor[record]}>
-          {record}
-        </Tag>
-      )
-    },
-    {
-      title: 'Tipo de viaje',
-      dataIndex: 'TravelExecution',
-      key: 'travelType',
-    },
-    {
-      title: 'Fecha de inicio',
+      title: <TitleTable>Fecha de Inicio</TitleTable>,
       dataIndex: 'StartTime',
       key: 'startTime',
       render: (record) => (
@@ -77,7 +71,7 @@ const CurrentTravels = ({user}) =>{
       )
     },
     {
-      title: 'Fecha de llegada',
+      title:<TitleTable>Fecha de Llegada</TitleTable>,
       dataIndex: 'EndTime',
       key: 'endTime',
       render: (record) => (
@@ -87,15 +81,32 @@ const CurrentTravels = ({user}) =>{
       )
     },
     {
-      title: 'Información',
+      title: <TitleTable>Tipo de Viaje</TitleTable>,
+      dataIndex: 'TravelExecution',
+      key: 'travelType',
+    },
+    {
+      title: <TitleTable>Estatus</TitleTable>,
+      dataIndex: 'Status',
+      key: 'status',
+      render: (record) => (
+          <Tag color={StatusColor[record]} >
+            {record}
+          </Tag>
+      )
+    },   
+    {
+      title: <TitleTable textAlign="center">Información de Viaje</TitleTable>,
       dataIndex: 'IdTravel',
       key: 'detail',
       render: (text, record) => (
-        <Button   
-          style={{marginRight:10}}
-          shape="circle" 
-          icon={<EditOutlined style={{color:"#3498db"}}/>}
-          onClick={()=> handleOpenTravelDetail(record)} />
+        <Row justify="center">
+          <Button   
+            style={{marginRight:10}}
+            shape="circle" 
+            icon={<EditOutlined style={{color:"#3498db"}}/>}
+            onClick={()=> handleOpenTravelDetail(record)} />
+        </Row>
       ),
     },
   ];

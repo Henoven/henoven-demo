@@ -29,7 +29,7 @@ const MainPage = ({children}) =>{
       {name: "mis viajes", route: "travels", iconComponent:"global_outlined"},
       {name: "equipos", route: "teams", iconComponent:"team_outlined"},
       {name: "dispositivos", route: "devices", iconComponent:"mobile_outlined"},
-      {name: "almacen", route: "storage", iconComponent:"shop-outlined"},
+      {name: "almacén", route: "storage", iconComponent:"shop-outlined"},
     ];
 
     useEffect(()=>{
@@ -91,6 +91,8 @@ const MainPage = ({children}) =>{
             <Image 
               src="http://henovenalfa.000webhostapp.com/resources/logo.png" 
               preview={false} 
+              height={35}
+              width={35}
               className={styles.logo}/> 
           }
           <Menu theme="light" mode="inline">
@@ -127,7 +129,11 @@ const MainPage = ({children}) =>{
         </Sider>
         <Layout className={styles.contentLayout}>
           <Header style={{ padding: 0 }} >
-            <Row justify="end" style={{padding:20}}>
+            <Row 
+              justify="end" 
+              style={{paddingRight:20, paddingTop:25}} 
+              align="bottom"
+            >
               <Title level={3} style={{color:"white"}}>{nameHeader}</Title>
             </Row>
           </Header>

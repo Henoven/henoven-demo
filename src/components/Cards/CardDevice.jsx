@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import {Col, Row, Button, Badge, Switch, message } from "antd";
+import {Col, Row, Button, Badge, Switch } from "antd";
 import { EditOutlined} from '@ant-design/icons';
-import axios from "../../axios";
 
 const Statuses = {
     on: "processing",
@@ -16,7 +15,6 @@ const CardDevice = ({
     onClick,
     onTurnOnOff,
     IdMotherBoard,
-    data,
 }) =>{
     const [isMotherBoardTurnedOn, setIsMotherBoardTurnedOn] = useState();
 

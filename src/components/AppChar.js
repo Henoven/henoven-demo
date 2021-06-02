@@ -16,6 +16,23 @@ const AppChar = ({
         chart: {
           height: 350,
           type: 'line',
+          zoom:{
+            enabled: true,
+            type: 'x',  
+            autoScaleYaxis: true,  
+            zoomedArea: {
+              fill: {
+                color: '#90CAF9',
+                opacity: 0.4
+              },
+              stroke: {
+                color: '#0D47A1',
+                opacity: 0.4,
+                width: 1
+              }
+          }
+
+          }
         },
         annotations: {
           yaxis: [ {
@@ -71,6 +88,8 @@ const AppChar = ({
           }
         },
         yaxis: [{
+          min: -offSet,
+          max:parseFloat(maxTemp)+offSet,
           decimalsInFloat:2,
           title: {
             text: 'Temperatura',
