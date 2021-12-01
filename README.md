@@ -1,4 +1,4 @@
-#Henoven
+# Henoven
 
 **Project Created By:**<br /> Luis Daniel Guerra Rosales y Sebastián Rodríguez Maldonado<br />
 
@@ -10,7 +10,7 @@ Dr. Leonardo Valdivia<br />
 
 ![image](https://user-images.githubusercontent.com/75276451/119406751-d6405500-bca8-11eb-8dd3-9c66b2d0cb48.png)
 
-##About
+## About
 Henoven is a React web app developed with the purpose of being a platform of monitoring and control of temperature and humidity in refrigerated trucks used for carrying food or medicines. Some of the features that this app has are:
 
 - The user can watch in real time the temperature, location and status of all of his trucks in a user friendly interface (using charts and google maps to present the data).
