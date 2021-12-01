@@ -1,4 +1,36 @@
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+# Henoven
+
+**Project Created By:**<br /> Luis Daniel Guerra Rosales y Sebastián Rodríguez Maldonado<br />
+
+**For the class of:**<br />
+Mechatronics Projects, January-May 2021<br />
+
+**Professor:**<br />
+Dr. Leonardo Valdivia<br />
+
+![image](https://user-images.githubusercontent.com/75276451/119406751-d6405500-bca8-11eb-8dd3-9c66b2d0cb48.png)
+
+## About
+Henoven is a React web app developed with the purpose of being a platform of monitoring and control of temperature and humidity in refrigerated trucks used for carrying food or medicines. Some of the features that this app has are:
+
+- The user can watch in real time the temperature, location and status of all of his trucks in a user friendly interface (using charts and google maps to present the data).
+- Create teams to organize who can edit and see what.
+- Generate alarms whenever a truck reaches a dangerous temperature that can spoil the carrying products.
+- See all the travels that were made in the past and filtered them by date, name, etc.
+- Connect and set new GPS devices (for monitoring location, temperature, humidity, etc) to your account.
+
+The idea is to have a user friendly platform that can help the frozen food and medicine industry to control and save money avoiding deliver spoiled products to their clients.
+
+##Project Development
+
+In order to realize this project we used the follow packages:
+
+-Axios
+-Redux
+-ApexCharts
+-Antd
+
+We also used the google-maps API to show the location of the GPS devices.
 
 ## Available Scripts
 
