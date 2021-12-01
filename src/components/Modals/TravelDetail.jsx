@@ -8,8 +8,9 @@ import Geocode from "react-geocode";
 import { GoogleMap, useJsApiLoader, Marker } from '@react-google-maps/api';
 
 import Modal from "../../components/Modals/Modal";
-import {KeyGeocoding} from "../../constants";
 import {getDateFiltered} from "../../api/dateService";
+
+var KeyGeocoding = config.KEY_GEOCODING;
 
 const { Title } = Typography;
 
