@@ -2,10 +2,10 @@
 
 **Project Created By:**<br /> Luis Daniel Guerra Rosales y Sebastián Rodríguez Maldonado<br />
 
-**Para la clase de:**<br />
+**For the class of:**<br />
 Mechatronics Projects, January-May 2021<br />
 
-**Del profesor:**<br />
+**Professor:**<br />
 Dr. Leonardo Valdivia<br />
 
 ![image](https://user-images.githubusercontent.com/75276451/119406751-d6405500-bca8-11eb-8dd3-9c66b2d0cb48.png)
