@@ -1,6 +1,6 @@
 # Henoven
 
-**Project Created By:**<br /> Luis Daniel Guerra Rosales y Sebastián Rodríguez Maldonado<br />
+**Project Created By:**<br /> Luis Daniel Guerra Rosales & Sebastián Rodríguez Maldonado<br />
 
 **For the class of:**<br />
 Mechatronics Projects, January-May 2021<br />
